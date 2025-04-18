@@ -1,0 +1,17 @@
+//
+//  InstagramFeedCloneApp.swift
+//  InstagramFeedCloneApp
+//
+//  Created by Mohamed Afsal on 17/04/2025.
+//
+
+import SwiftUI
+
+@main
+struct InstagramLikeFeedApp: App {
+    var body: some Scene {
+        WindowGroup {
+            FeedView()
+        }
+    }
+}
