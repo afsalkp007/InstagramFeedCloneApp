@@ -10,35 +10,33 @@ import Foundation
 final class RemoteDataLoader: DataLoader {
     
     private let url: URL
+    private let client: HTTPClient
     
-    init(url: URL) {
-        self.url = url
+    typealias Result = DataLoader.Result
+    
+    init(url: URL, client: HTTPClient) {
+      self.url = url
+      self.client = client
     }
     
-    func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(Constants.accessToken)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                let error = NSError(domain: "NetworkManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])
-                completion(.failure(error))
-                return
-            }
-            
-            do {
-                let decodedResponse = try JSONDecoder().decode(Response.self, from: data)
-                completion(.success(decodedResponse.data))
-            } catch {
+    func loadPosts(completion: @escaping (Result) -> Void) {
+        client.get(from: url) { result in
+            switch result {
+            case let .success((data, response)):
+                completion(Self.map(data, from: response))
+                
+            case .failure(let error):
                 completion(.failure(error))
             }
         }
-        
-        task.resume()
+    }
+    
+    static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
+        do {
+            let decodedResponse = try JSONDecoder().decode(Response.self, from: data)
+            return .success(decodedResponse.data)
+        } catch {
+            return .failure(error)
+        }
     }
 }

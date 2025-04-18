@@ -17,20 +17,6 @@ struct InstagramLikeFeedApp: App {
     }
     
     func makeFeedView() -> FeedView {
-        let url = PostEndPoint.getPosts(page: 0).url(baseURL: baseURL)
-        let remoteLoader = RemoteDataLoader(url: url)
-        let localLoader = LocalDataLoader()
-
-        let viewModel = FeedViewModel(loader: MainQueueDispatchDecorator(
-            decoratee: DataLoaderWithFallbackComposite(
-                primary: FeedLoaderCacheDecorator(
-                    decoratee: remoteLoader,
-                    cache: localLoader),
-                fallback: localLoader)))
-        return FeedView(viewModel: viewModel)
-    }
-    
-    var baseURL: URL {
-        return URL(string: "https://api.imgur.com")!
+        return FeedUIComposer.composeFeedView()
     }
 }

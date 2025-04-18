@@ -14,7 +14,7 @@ struct Constants {
 enum PostEndPoint {
     case getPosts(page: Int)
 
-    public func url(baseURL: URL) -> URL {
+    func url(baseURL: URL) -> URL {
         switch self {
         case let .getPosts(page):
             return baseURL.appendingPathComponent("/v1/gallery/hot/viral/day/\(page)")
