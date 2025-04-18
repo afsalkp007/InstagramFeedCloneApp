@@ -17,8 +17,7 @@ struct InstagramLikeFeedApp: App {
     }
     
     func makeFeedView() -> FeedView {
-        let urlString = Constants.API.baseURL.value + Constants.API.postsEndpoint(page: 0).value
-        let url = URL(string: urlString)!
+        let url = PostEndPoint.getPosts(page: 0).url(baseURL: baseURL)
         let remoteLoader = RemoteDataLoader(url: url)
         let localLoader = LocalDataLoader()
 
@@ -29,5 +28,9 @@ struct InstagramLikeFeedApp: App {
                     cache: localLoader),
                 fallback: localLoader)))
         return FeedView(viewModel: viewModel)
+    }
+    
+    var baseURL: URL {
+        return URL(string: "https://api.imgur.com")!
     }
 }

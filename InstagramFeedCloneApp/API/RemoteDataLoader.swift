@@ -17,7 +17,7 @@ final class RemoteDataLoader: DataLoader {
     
     func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
         var request = URLRequest(url: url)
-        request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(Constants.accessToken)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {

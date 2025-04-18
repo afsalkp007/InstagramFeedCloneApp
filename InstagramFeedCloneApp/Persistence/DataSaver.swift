@@ -8,4 +8,3 @@
 protocol DataSaver {
     func savePosts(_ posts: [Post])
 }
-
