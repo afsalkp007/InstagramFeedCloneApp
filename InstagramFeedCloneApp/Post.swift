@@ -5,6 +5,8 @@
 //  Created by Mohamed Afsal on 17/04/2025.
 //
 
+import Foundation
+
 struct Response: Codable {
     let success: Bool
     let status: Int
@@ -20,6 +22,10 @@ struct Image: Codable, Identifiable {
     let id: String
     let type: TypeEnum
     let link: String
+    
+    var url: URL {
+        URL(string: link)!
+    }
 }
 
 enum TypeEnum: String, Codable {

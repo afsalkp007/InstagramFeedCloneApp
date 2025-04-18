@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct FeedView: View {
-    @Bindable private var viewModel = FeedViewModel()
+    
+    @Bindable var viewModel: FeedViewModel
     
     var body: some View {
         NavigationView {
@@ -19,12 +20,10 @@ struct FeedView: View {
                             ShimmerView()
                                 .frame(height: 300)
                                 .cornerRadius(10)
-                                .padding(.horizontal)
                         }
                     } else {
                         ForEach(viewModel.posts) { post in
                             Group {
-                                let dummyImage = Image(id: "", type: .imageJPEG, link: "https://i.imgur.com/foheRIC.jpg")
                                 PostView(image: post.images?.first ?? dummyImage)
                             }
                         }
@@ -48,9 +47,9 @@ struct FeedView: View {
             }
         }
     }
+    
+    private var dummyImage: Image {
+        Image(id: "dfsd3423", type: .imageJPEG, link: "https://i.imgur.com/foheRIC.jpg")
+    }
 }
 
-
-#Preview {
-    FeedView()
-}

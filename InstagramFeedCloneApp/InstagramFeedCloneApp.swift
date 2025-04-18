@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct InstagramLikeFeedApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            FeedView()
+            makeFeedView()
         }
+    }
+    
+    func makeFeedView() -> FeedView {
+        let viewModel = FeedViewModel(loader: RemoteDataLoader(), saver: LocalDataLoader())
+        return FeedView(viewModel: viewModel)
     }
 }

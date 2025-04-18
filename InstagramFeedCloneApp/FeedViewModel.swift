@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 struct ErrorWrapper: Identifiable {
     let id = UUID()
@@ -18,30 +17,32 @@ class FeedViewModel {
     var posts: [Post] = []
     var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
-
-    private let networkManager: NetworkManager
-    private var cancellables = Set<AnyCancellable>()
     
-    init(networkManager: NetworkManager = NetworkManager()) {
-        self.networkManager = networkManager
-    }
+    private let loader: DataLoader
+    private let saver: DataSaver
+    
 
+    init(loader: DataLoader, saver: DataSaver) {
+        self.loader = loader
+        self.saver = saver
+    }
+    
     func fetchPosts() {
         isLoading = true
-        networkManager.fetchPosts()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                self?.isLoading = false
-                
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.errorMessage = ErrorWrapper(message: error.localizedDescription)
+        
+        loader.loadPosts { [weak self] result in
+            guard let self else { return }
+            self.isLoading = false
+            
+            switch result {
+            case .success(let posts):
+                DispatchQueue.main.async {
+                    self.posts = posts
                 }
-            }, receiveValue: { [weak self] response in
-                self?.posts = response.data
-            })
-            .store(in: &cancellables)
+                self.saver.savePosts(posts)
+            case .failure(let error):
+                self.errorMessage = ErrorWrapper(message: error.localizedDescription)
+            }
+        }
     }
 }
