@@ -22,16 +22,17 @@ struct InstagramLikeFeedApp: App {
         let remoteLoader = RemoteDataLoader(url: url)
         
         let localLoader = LocalDataLoader()
+        
+        let cacheDecorator = FeedLoaderCacheDecorator(
+            decoratee: remoteLoader,
+            cache: localLoader)
+        
+        let fallBackComposite = DataLoaderWithFallbackComposite(
+            primary: cacheDecorator,
+            fallback: localLoader)
 
-        let viewModel = FeedViewModel(
-            loader: MainQueueDispatchDecorator(
-                decoratee: DataLoaderWithFallbackComposite(
-                    primary: FeedLoaderCacheDecorator(
-                        decoratee: remoteLoader,
-                        cache: localLoader
-                    ),
-                    fallback: localLoader
-                )))
+        let viewModel = FeedViewModel(loader: MainQueueDispatchDecorator(
+            decoratee: fallBackComposite))
         return FeedView(viewModel: viewModel)
     }
 }

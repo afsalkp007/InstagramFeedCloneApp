@@ -14,10 +14,10 @@ struct PostView: View {
         
         switch image.type {
         case .videoMp4:
-            VideoPostView(manager: VideoManager(url: image.url))
+            FeedVideoView(manager: VideoManager(url: image.url))
             
         case .imageJPEG, .imagePNG:
-            ImagePostView(url: image.url)
+            FeedImageView(url: image.url)
         }
     }
 }

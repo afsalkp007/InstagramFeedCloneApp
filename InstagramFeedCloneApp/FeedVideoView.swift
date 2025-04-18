@@ -8,7 +8,7 @@
 import SwiftUI
 import AVKit
 
-struct VideoPostView: View {
+struct FeedVideoView: View {
     let manager: VideoManager
     
     var body: some View {

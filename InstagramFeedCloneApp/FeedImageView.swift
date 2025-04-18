@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ImagePostView: View {
+struct FeedImageView: View {
     let url: URL
     
     var body: some View {
@@ -18,7 +18,9 @@ struct ImagePostView: View {
                 .clipped()
                 .frame(height: 300)
                 .cornerRadius(10)
-        } placeholder: {}
+        } placeholder: {
+            ProgressView()
+        }
         .frame(height: 300)
     }
 }
