@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 struct FeedVideoView: View {
-    let manager: VideoManager
+    let manager: FeedVideoViewModel
     
     var body: some View {
         VideoPlayer(player: manager.player())

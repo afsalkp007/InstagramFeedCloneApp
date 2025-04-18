@@ -19,7 +19,9 @@ struct FeedImageView: View {
                 .frame(height: 300)
                 .cornerRadius(10)
         } placeholder: {
-            ProgressView()
+            ShimmerView()
+                .frame(height: 300)
+                .cornerRadius(10)
         }
         .frame(height: 300)
     }

@@ -7,7 +7,7 @@
 
 import AVKit
 
-final class VideoManager {
+final class FeedVideoViewModel {
     private let url: URL
     private var players: [URL: AVPlayer] = [:]
     

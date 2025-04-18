@@ -22,11 +22,11 @@ final class MainQueueDispatchDecorator<T> {
     completion()
   }
 }
- 
+
 extension MainQueueDispatchDecorator: DataLoader where T == DataLoader {
     func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
         decoratee.loadPosts { [weak self] result in
-        self?.dispatch { completion(result) }
+            self?.dispatch { completion(result) }
         }
     }
 }

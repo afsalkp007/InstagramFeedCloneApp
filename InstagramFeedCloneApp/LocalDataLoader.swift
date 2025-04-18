@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LocalDataLoader {
+final class LocalDataLoader {
     private let cacheKey = "cachedPosts"
     
     func clearCache() {
@@ -17,15 +17,13 @@ struct LocalDataLoader {
 
 extension LocalDataLoader: DataLoader {
     func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        do {
+        completion(DataLoader.Result {
             guard let data = UserDefaults.standard.data(forKey: cacheKey) else {
-                return completion(.success([]))
+                return []
             }
             let posts = try JSONDecoder().decode([Post].self, from: data)
-            completion(.success(posts))
-        } catch {
-            completion(.failure(error))
-        }
+            return posts
+        })
     }
 }
 
