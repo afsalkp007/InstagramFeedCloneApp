@@ -24,7 +24,7 @@ struct FeedView: View {
                     } else {
                         ForEach(viewModel.posts) { post in
                             Group {
-                                PostView(image: post.images.first ?? dummyImage)
+                                PostView(image: post.images?.first ?? dummyImage)
                             }
                         }
                     }

@@ -16,7 +16,7 @@ struct PostView: View {
         case .videoMp4:
             FeedVideoView(manager: FeedVideoViewModel(url: image.url))
             
-        case .imageJPEG, .imagePNG:
+        case .imageJPEG, .imagePNG, .imageGIF:
             FeedImageView(url: image.url)
         }
     }

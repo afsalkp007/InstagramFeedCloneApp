@@ -37,6 +37,7 @@ struct Image: Codable, Identifiable {
 enum TypeEnum: String, Codable {
     case imageJPEG = "image/jpeg"
     case imagePNG = "image/png"
+    case imageGIF = "image/gif"
     case videoMp4 = "video/mp4"
 }
 

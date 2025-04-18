@@ -40,7 +40,6 @@ extension LocalDataLoader: DataSaver {
                 self?.store.insert(posts, completion: completion)
             case let .failure(error):
                 completion(.failure(error))
-                return
             }
         }
     }
