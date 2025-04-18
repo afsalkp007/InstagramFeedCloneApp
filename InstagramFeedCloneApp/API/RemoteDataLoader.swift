@@ -14,6 +14,10 @@ final class RemoteDataLoader: DataLoader {
     
     typealias Result = DataLoader.Result
     
+    enum Error: Swift.Error {
+        case invalidData
+    }
+    
     init(url: URL, client: HTTPClient) {
       self.url = url
       self.client = client
@@ -33,8 +37,8 @@ final class RemoteDataLoader: DataLoader {
     
     static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         do {
-            let decodedResponse = try JSONDecoder().decode(Response.self, from: data)
-            return .success(decodedResponse.data)
+            let posts = try RemoteDataItemMapper.map(data, from: response)
+            return .success(posts)
         } catch {
             return .failure(error)
         }
