@@ -7,9 +7,17 @@
 
 import Foundation
 
-class RemoteDataLoader: DataLoader {
+final class RemoteDataLoader: DataLoader {
+    
+    private let url: URL
+    
+    init(url: URL) {
+        self.url = url
+    }
+    
     func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        let request = postURLRequest
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -32,13 +40,5 @@ class RemoteDataLoader: DataLoader {
         }
         
         task.resume()
-    }
-    
-    var postURLRequest: URLRequest {
-        let urlString = Constants.API.baseURL.value + Constants.API.postsEndpoint(page: 0).value
-        let url = URL(string: urlString)!
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
-        return request
     }
 }
