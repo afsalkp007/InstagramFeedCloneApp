@@ -34,6 +34,9 @@ struct FeedView: View {
                     viewModel.fetchPosts()
                 }
             }
+            .refreshable {
+                viewModel.fetchPosts()
+            }
             .padding()
             .navigationTitle("Instagram Feed")
             .alert(item: $viewModel.errorMessage) { errorWrapper in
