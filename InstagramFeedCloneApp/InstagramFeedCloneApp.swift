@@ -17,7 +17,15 @@ struct InstagramLikeFeedApp: App {
     }
     
     func makeFeedView() -> FeedView {
-        let viewModel = FeedViewModel(loader: RemoteDataLoader(), saver: LocalDataLoader())
+        let viewModel = FeedViewModel(
+            loader: MainQueueDispatchDecorator(
+                decoratee: DataLoaderWithFallbackComposite(
+                    primary: FeedLoaderCacheDecorator(
+                        decoratee: RemoteDataLoader(),
+                        cache: LocalDataLoader()
+                    ),
+                    fallback: LocalDataLoader()
+                )))
         return FeedView(viewModel: viewModel)
     }
 }

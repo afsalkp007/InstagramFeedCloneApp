@@ -19,12 +19,9 @@ class FeedViewModel {
     var isLoading: Bool = false
     
     private let loader: DataLoader
-    private let saver: DataSaver
-    
 
-    init(loader: DataLoader, saver: DataSaver) {
+    init(loader: DataLoader) {
         self.loader = loader
-        self.saver = saver
     }
     
     func fetchPosts() {
@@ -36,13 +33,14 @@ class FeedViewModel {
             
             switch result {
             case .success(let posts):
-                DispatchQueue.main.async {
-                    self.posts = posts
-                }
-                self.saver.savePosts(posts)
+                self.posts = posts
             case .failure(let error):
                 self.errorMessage = ErrorWrapper(message: error.localizedDescription)
             }
         }
+    }
+    
+    var showShimmer: Bool {
+        isLoading && posts.isEmpty
     }
 }

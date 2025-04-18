@@ -15,7 +15,7 @@ struct FeedView: View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    if viewModel.isLoading && viewModel.posts.isEmpty {
+                    if viewModel.showShimmer {
                         ForEach(0..<5, id: \.self) { _ in
                             ShimmerView()
                                 .frame(height: 300)
@@ -37,7 +37,7 @@ struct FeedView: View {
                 viewModel.fetchPosts()
             }
             .padding()
-            .navigationTitle("Instagram Feed")
+            .navigationTitle("Instagram Sample Feed")
             .alert(item: $viewModel.errorMessage) { errorWrapper in
                 Alert(
                     title: Text("Error"),
