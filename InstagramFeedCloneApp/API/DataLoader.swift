@@ -1,18 +1,12 @@
 //
-//  Protocols.swift
+//  DataLoader.swift
 //  InstagramFeedCloneApp
 //
 //  Created by Mohamed Afsal on 18/04/2025.
 //
-
 
 protocol DataLoader {
     typealias Result = Swift.Result<[Post], Error>
     
     func loadPosts(completion: @escaping (Result) -> Void)
 }
-
-protocol DataSaver {
-    func savePosts(_ posts: [Post])
-}
-
