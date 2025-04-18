@@ -9,6 +9,6 @@ import Foundation
 
 struct Post: Codable, Identifiable {
     let id: String
-    let images: [Image]?
+    let images: [Image]
 }
 

@@ -19,9 +19,15 @@ final class FeedLoaderCacheDecorator: DataLoader {
     func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
         decoratee.loadPosts { [weak self] result in
             completion(result.map { posts in
-                self?.cache.savePosts(posts)
+                self?.cache.saveIgnoringResult(posts)
                 return posts
             })
         }
+    }
+}
+
+private extension DataSaver {
+    func saveIgnoringResult(_ posts: [Post]) {
+        savePosts(posts) { _ in }
     }
 }

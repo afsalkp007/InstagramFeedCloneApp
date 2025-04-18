@@ -19,8 +19,8 @@ class URLSessionHTTPClient: HTTPClient {
 
 extension URLSessionHTTPClient {
 
-    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-        let task = session.dataTask(with: url) { data, response, error in
+    func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        let task = session.dataTask(with: request) { data, response, error in
             completion(Result {
                 if let error = error {
                     throw error

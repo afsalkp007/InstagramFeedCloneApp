@@ -6,5 +6,7 @@
 //
 
 protocol DataSaver {
-    func savePosts(_ posts: [Post])
+    typealias Result = Swift.Result<Void, Error>
+    
+    func savePosts(_ posts: [Post], completion: @escaping (Result) -> Void)
 }

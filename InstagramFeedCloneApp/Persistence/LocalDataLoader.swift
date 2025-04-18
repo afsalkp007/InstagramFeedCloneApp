@@ -8,28 +8,40 @@
 import Foundation
 
 final class LocalDataLoader {
-    private let cacheKey = "cachedPosts"
+    private let store: DataStore
     
-    func clearCache() {
-        UserDefaults.standard.removeObject(forKey: cacheKey)
+    init(store: DataStore) {
+        self.store = store
     }
 }
 
 extension LocalDataLoader: DataLoader {
-    func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        completion(DataLoader.Result {
-            guard let data = UserDefaults.standard.data(forKey: cacheKey) else {
-                return []
+    typealias LoadResult = DataLoader.Result
+    
+    func loadPosts(completion: @escaping (LoadResult) -> Void) {
+        store.retrieve { result in
+            switch result {
+            case let .success(posts):
+                completion(.success(posts))
+            case let .failure(error):
+                completion(.failure(error))
             }
-            let posts = try JSONDecoder().decode([Post].self, from: data)
-            return posts
-        })
+        }
     }
 }
 
 extension LocalDataLoader: DataSaver {
-    func savePosts(_ posts: [Post]) {
-        let encoded = try? JSONEncoder().encode(posts)
-        UserDefaults.standard.set(encoded, forKey: cacheKey)
+    typealias SaveResult = DataSaver.Result
+    
+    func savePosts(_ posts: [Post], completion: @escaping (SaveResult) -> Void) {
+        store.deleteCachedData { [weak self] result in
+            switch result {
+            case .success:
+                self?.store.insert(posts, completion: completion)
+            case let .failure(error):
+                completion(.failure(error))
+                return
+            }
+        }
     }
 }

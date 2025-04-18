@@ -9,7 +9,7 @@ import Foundation
 
 final class RemoteDataLoader: DataLoader {
     
-    private let url: URL
+    private let request: URLRequest
     private let client: HTTPClient
     
     typealias Result = DataLoader.Result
@@ -18,13 +18,13 @@ final class RemoteDataLoader: DataLoader {
         case invalidData
     }
     
-    init(url: URL, client: HTTPClient) {
-      self.url = url
-      self.client = client
+    init(request: URLRequest, client: HTTPClient) {
+        self.request = request
+        self.client = client
     }
     
     func loadPosts(completion: @escaping (Result) -> Void) {
-        client.get(from: url) { result in
+        client.get(for: request) { result in
             switch result {
             case let .success((data, response)):
                 completion(Self.map(data, from: response))
