@@ -15,17 +15,20 @@ final class FeedUIComposer {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
         
-        let remoteLoader = RemoteDataLoader(request: request, client: httpClient)
+        let remoteFeedLoader = RemoteDataLoader(request: request, client: httpClient)
+        let remoteMediaLoader = RemoteMediaDataLoader(httpClient: httpClient)
         
         let store = UserDefaultsDataStore(key: Constants.Cache.key.value)
         let localLoader = LocalDataLoader(store: store)
 
-        let viewModel = FeedViewModel(loader: MainQueueDispatchDecorator(
+        let viewModel = FeedViewModel(
+            feedLoader: MainQueueDispatchDecorator(
             decoratee: DataLoaderWithFallbackComposite(
                 primary: FeedLoaderCacheDecorator(
-                    decoratee: remoteLoader,
+                    decoratee: remoteFeedLoader,
                     cache: localLoader),
-                fallback: localLoader)))
+                fallback: localLoader)),
+            mediaLoader: MainQueueDispatchDecorator(decoratee: remoteMediaLoader))
         return FeedView(viewModel: viewModel)
     }
     

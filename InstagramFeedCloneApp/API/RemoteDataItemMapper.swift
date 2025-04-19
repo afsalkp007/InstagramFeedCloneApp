@@ -26,7 +26,7 @@ struct Root: Codable {
 
 public struct Media: Codable, Identifiable, Equatable {
     public let id: String
-    public let type: TypeEnum
+    public let type: MediaType
     public let link: String
     
     var url: URL {
@@ -34,7 +34,7 @@ public struct Media: Codable, Identifiable, Equatable {
     }
 }
 
-public enum TypeEnum: String, Codable {
+public enum MediaType: String, Codable {
     case imageJPEG = "image/jpeg"
     case imagePNG = "image/png"
     case imageGIF = "image/gif"

@@ -49,16 +49,9 @@ struct FeedView: View {
     }
     
     private var postViews: some View {
-        ForEach(viewModel.posts) { post in
-            PostView(media: post.images?.first ?? placeHolder)
+        ForEach(viewModel.viewModels) { viewModel in
+            PostView(viewModel: viewModel)
         }
     }
     
-    private var placeHolder: Media {
-        Media(
-            id: "dfsd3423",
-            type: .imageJPEG,
-            link: "https://i.imgur.com/foheRIC.jpg"
-        )
-    }
 }

@@ -8,8 +8,9 @@
 import SwiftUI
 import AVKit
 
-struct FeedVideoView: View {
-    let url: URL
+struct FeedVideoView: View {    
+    let viewModel: PostViewModel
+    
     @State private var player: AVPlayer?
 
     var body: some View {
@@ -36,24 +37,14 @@ struct FeedVideoView: View {
     }
 
     private func loadVideo() {
-        CacheManager.shared.getCachedData(for: url) { data in
-            if let data = data {
-                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
-                try? data.write(to: tempURL)
+        viewModel.loadVideo { result in
+            switch result {
+            case let .success(url):
                 DispatchQueue.main.async {
-                    self.player = AVPlayer(url: tempURL)
+                    self.player = AVPlayer(url: url)
                 }
-            } else {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-                    if let data = data {
-                        CacheManager.shared.cacheData(data, for: url)
-                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
-                        try? data.write(to: tempURL)
-                        DispatchQueue.main.async {
-                            self.player = AVPlayer(url: tempURL)
-                        }
-                    }
-                }.resume()
+            case .failure(let error):
+                print("Error loading video: \(error)")
             }
         }
     }

@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct PostView: View {
-    let media: Media
+    let viewModel: PostViewModel
     
     var body: some View {
         
-        switch media.type {
+        switch viewModel.media.type {
         case .videoMp4:
-            FeedVideoView(url: media.url)
+            FeedVideoView(viewModel: viewModel)
             
         case .imageJPEG, .imagePNG, .imageGIF:
-            FeedImageView(url: media.url)
+            FeedImageView(viewModel: viewModel)
         }
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FeedImageView: View {
-    let url: URL
+    let viewModel: PostViewModel
 
     @State private var image: UIImage?
 
@@ -34,20 +34,14 @@ struct FeedImageView: View {
     }
 
     private func loadImage() {
-        CacheManager.shared.getCachedData(for: url) { data in
-            if let data = data, let downloadedImage = UIImage(data: data) {
-                DispatchQueue.main.async {
+        viewModel.loadImage { result in
+            switch result {
+            case let .success(data):
+                if let downloadedImage = UIImage(data: data) {
                     self.image = downloadedImage
                 }
-            } else {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-                    if let data = data, let downloadedImage = UIImage(data: data) {
-                        CacheManager.shared.cacheData(data, for: url)
-                        DispatchQueue.main.async {
-                            self.image = downloadedImage
-                        }
-                    }
-                }.resume()
+            case .failure(let error):
+                print("Error loading image: \(error)")
             }
         }
     }
