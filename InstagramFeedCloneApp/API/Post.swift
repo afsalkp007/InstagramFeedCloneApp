@@ -9,9 +9,9 @@ import Foundation
 
 public struct Post: Codable, Identifiable, Equatable {
     public let id: String
-    public let images: [Image]?
+    public let images: [Media]?
     
-    public init(id: String, images: [Image]?) {
+    public init(id: String, images: [Media]?) {
         self.id = id
         self.images = images
     }

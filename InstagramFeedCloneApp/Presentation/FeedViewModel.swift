@@ -34,8 +34,18 @@ class FeedViewModel {
             switch result {
             case .success(let posts):
                 self.posts = posts
+                self.preloadMedia(for: posts)
             case .failure(let error):
                 self.errorMessage = ErrorWrapper(message: error.localizedDescription)
+            }
+        }
+    }
+    
+    private func preloadMedia(for posts: [Post]) {
+        let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
+        CacheManager.shared.preloadData(urls: mediaURLs) {
+            DispatchQueue.main.async {
+                self.isLoading = false
             }
         }
     }

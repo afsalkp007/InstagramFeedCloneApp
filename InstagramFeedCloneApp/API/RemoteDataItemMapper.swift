@@ -24,7 +24,7 @@ struct Root: Codable {
     let data: [Post]
 }
 
-public struct Image: Codable, Identifiable, Equatable {
+public struct Media: Codable, Identifiable, Equatable {
     public let id: String
     public let type: TypeEnum
     public let link: String
