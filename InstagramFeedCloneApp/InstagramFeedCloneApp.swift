@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct InstagramLikeFeedApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            FeedView()
+            makeFeedView()
         }
+    }
+    
+    func makeFeedView() -> FeedView {
+        return FeedUIComposer.composeFeedView()
     }
 }

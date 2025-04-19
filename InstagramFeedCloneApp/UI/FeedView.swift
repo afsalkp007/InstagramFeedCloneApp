@@ -8,24 +8,23 @@
 import SwiftUI
 
 struct FeedView: View {
-    @Bindable private var viewModel = FeedViewModel()
+    
+    @Bindable var viewModel: FeedViewModel
     
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    if viewModel.isLoading && viewModel.posts.isEmpty {
+                    if viewModel.showShimmer {
                         ForEach(0..<5, id: \.self) { _ in
                             ShimmerView()
                                 .frame(height: 300)
                                 .cornerRadius(10)
-                                .padding(.horizontal)
                         }
                     } else {
                         ForEach(viewModel.posts) { post in
                             Group {
-                                let dummyImage = Image(id: "", type: .imageJPEG, link: "https://i.imgur.com/foheRIC.jpg")
-                                PostView(image: post.images?.first ?? dummyImage)
+                                PostView(image: post.images?.first ?? placeHolder)
                             }
                         }
                     }
@@ -34,8 +33,11 @@ struct FeedView: View {
                     viewModel.fetchPosts()
                 }
             }
+            .refreshable {
+                viewModel.fetchPosts()
+            }
             .padding()
-            .navigationTitle("Instagram Feed")
+            .navigationTitle("Instagram Sample Feed")
             .alert(item: $viewModel.errorMessage) { errorWrapper in
                 Alert(
                     title: Text("Error"),
@@ -45,9 +47,13 @@ struct FeedView: View {
             }
         }
     }
+    
+    private var placeHolder: Image {
+        Image(
+            id: "dfsd3423",
+            type: .imageJPEG,
+            link: "https://i.imgur.com/foheRIC.jpg"
+        )
+    }
 }
 
-
-#Preview {
-    FeedView()
-}

@@ -1,0 +1,14 @@
+//
+//  HTTPClient.swift
+//  InstagramFeedCloneApp
+//
+//  Created by Mohamed Afsal on 18/04/2025.
+//
+
+import Foundation
+
+public protocol HTTPClient {
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    
+    func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void)
+}

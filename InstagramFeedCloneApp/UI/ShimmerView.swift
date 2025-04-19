@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShimmerView: View {
-    @State private var phase: CGFloat = 0
+    @State private var phase: CGFloat = -300
 
     var body: some View {
         Rectangle()
@@ -36,4 +36,11 @@ struct ShimmerView: View {
                 }
             }
     }
+}
+
+#Preview {
+    ShimmerView()
+        .frame(width: 300, height: 200)
+        .background(Color.white)
+        .cornerRadius(10)
 }

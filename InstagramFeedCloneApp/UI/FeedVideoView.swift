@@ -8,16 +8,16 @@
 import SwiftUI
 import AVKit
 
-struct VideoPostView: View {
-    let manager: VideoManager
+struct FeedVideoView: View {
+    let viewModel: FeedVideoViewModel
     
     var body: some View {
-        VideoPlayer(player: manager.player())
+        VideoPlayer(player: viewModel.player())
             .onAppear {
-                manager.play()
+                viewModel.play()
             }
             .onDisappear {
-                manager.pause()
+                viewModel.pause()
             }
             .frame(height: 300)
             .cornerRadius(10)
