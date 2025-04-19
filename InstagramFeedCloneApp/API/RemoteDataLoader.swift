@@ -7,23 +7,23 @@
 
 import Foundation
 
-final class RemoteDataLoader: DataLoader {
+public final class RemoteDataLoader: DataLoader {
     
     private let request: URLRequest
     private let client: HTTPClient
     
-    typealias Result = DataLoader.Result
+    public typealias Result = DataLoader.Result
     
-    enum Error: Swift.Error {
+    public enum Error: Swift.Error {
         case invalidData
     }
     
-    init(request: URLRequest, client: HTTPClient) {
+    public init(request: URLRequest, client: HTTPClient) {
         self.request = request
         self.client = client
     }
     
-    func loadPosts(completion: @escaping (Result) -> Void) {
+    public func loadPosts(completion: @escaping (Result) -> Void) {
         client.get(for: request) { result in
             switch result {
             case let .success((data, response)):
@@ -35,7 +35,7 @@ final class RemoteDataLoader: DataLoader {
         }
     }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
+    public static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         do {
             let posts = try RemoteDataItemMapper.map(data, from: response)
             return .success(posts)

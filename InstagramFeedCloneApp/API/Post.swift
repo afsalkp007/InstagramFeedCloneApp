@@ -7,8 +7,13 @@
 
 import Foundation
 
-struct Post: Codable, Identifiable {
-    let id: String
-    let images: [Image]?
+public struct Post: Codable, Identifiable, Equatable {
+    public let id: String
+    public let images: [Image]?
+    
+    public init(id: String, images: [Image]?) {
+        self.id = id
+        self.images = images
+    }
 }
 

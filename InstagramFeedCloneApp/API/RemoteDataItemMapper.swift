@@ -7,8 +7,8 @@
 
 import Foundation
 
-final class RemoteDataItemMapper {
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
+public final class RemoteDataItemMapper {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
         guard response.statusCode == 200 else {
             throw RemoteDataLoader.Error.invalidData
         }
@@ -24,17 +24,17 @@ struct Root: Codable {
     let data: [Post]
 }
 
-struct Image: Codable, Identifiable {
-    let id: String
-    let type: TypeEnum
-    let link: String
+public struct Image: Codable, Identifiable, Equatable {
+    public let id: String
+    public let type: TypeEnum
+    public let link: String
     
     var url: URL {
         URL(string: link)!
     }
 }
 
-enum TypeEnum: String, Codable {
+public enum TypeEnum: String, Codable {
     case imageJPEG = "image/jpeg"
     case imagePNG = "image/png"
     case imageGIF = "image/gif"
