@@ -8,8 +8,9 @@
 import Foundation
 
 public final class RemoteDataItemMapper {
+    
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
-        guard response.statusCode == 200 else {
+        guard response.isOK else {
             throw RemoteDataLoader.Error.invalidData
         }
         

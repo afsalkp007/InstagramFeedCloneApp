@@ -20,7 +20,7 @@ public final class RemoteMediaDataLoader: MediaDataLoader {
         let request = URLRequest(url: url)
         httpClient.get(for: request) { result in
             switch result {
-            case .success((let data, _)):
+            case let .success((data, _)):
                 completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))

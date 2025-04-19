@@ -40,6 +40,21 @@ class CacheManager {
         }
     }
     
+    func clearCache() {
+        queue.async(flags: .barrier) {
+            self.cache.removeAllObjects()
+            
+            do {
+                let fileURLs = try self.fileManager.contentsOfDirectory(at: self.diskCacheDirectory, includingPropertiesForKeys: nil)
+                for fileURL in fileURLs {
+                    try self.fileManager.removeItem(at: fileURL)
+                }
+            } catch {
+                print("Error clearing disk cache: \(error)")
+            }
+        }
+    }
+    
     private func diskCachePath(for url: URL) -> URL {
         return diskCacheDirectory.appendingPathComponent(url.lastPathComponent)
     }

@@ -38,6 +38,7 @@ class FeedViewModel {
             
             switch result {
             case let .success(posts):
+                self.cacheManager.clearCache()
                 self.viewModels = self.getPostViewModels(from: posts)
                 self.preloadMedia(for: posts)
             case .failure(let error):
@@ -83,19 +84,16 @@ class FeedViewModel {
 
     typealias PreLoadCompletion = (() -> Void)?
 
-    func preloadData(urls: [URL], completion: PreLoadCompletion) {
+    private func preloadData(urls: [URL], completion: PreLoadCompletion) {
         let dispatchGroup = DispatchGroup()
 
         for url in urls {
             dispatchGroup.enter()
-            cacheManager.getCachedData(for: url) { cachedData in
+            cacheManager.getCachedData(for: url) { [weak self] cachedData in
                 if cachedData == nil {
-                    URLSession.shared.dataTask(with: url) { data, _, _ in
-                        if let data = data {
-                            self.cacheManager.cacheData(data, for: url)
-                        }
+                    self?.preloadMedia(for: url) {
                         dispatchGroup.leave()
-                    }.resume()
+                    }
                 } else {
                     dispatchGroup.leave()
                 }
@@ -104,6 +102,22 @@ class FeedViewModel {
 
         dispatchGroup.notify(queue: .main) {
             completion?()
+        }
+    }
+    
+    private typealias EmptyClosure = () -> Void
+    
+    private func preloadMedia(for url: URL, completion: @escaping EmptyClosure) {
+        mediaLoader.loadMediaData(from: url) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case let .success(data):
+                self.cacheManager.cacheData(data, for: url)
+            case .failure:
+                break
+            }
+            completion()
         }
     }
 }
