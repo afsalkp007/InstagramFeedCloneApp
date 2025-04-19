@@ -8,7 +8,7 @@
 import XCTest
 import InstagramFeedCloneApp
 
-final class RemoteDataLoaderTests: XCTestCase {
+final class LoadDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_loadPosts_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
@@ -43,9 +43,9 @@ final class RemoteDataLoaderTests: XCTestCase {
         }
     }
     
-    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+    func test_loadPosts_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let client = HTTPClientSpy()
-        var sut: RemoteDataLoader? = RemoteDataLoader(request: URLRequest(url: URL(string: "https://example.com")!), client: client)
+        var sut: RemoteDataLoader? = RemoteDataLoader(request: URLRequest(url: anyURL()), client: client)
         
         var capturedResults = [RemoteDataLoader.Result]()
         sut?.loadPosts { capturedResults.append($0) }
@@ -60,7 +60,7 @@ final class RemoteDataLoaderTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: RemoteDataLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let request = URLRequest(url: URL(string: "https://example.com")!)
+        let request = URLRequest(url: anyURL())
         let sut = RemoteDataLoader(request: request, client: client)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
@@ -86,10 +86,8 @@ final class RemoteDataLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 5.0)
     }
     
-    private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
-        }
+    private func anyURL() -> URL {
+        return URL(string: "https://example.com")!
     }
     
     private func makePost(id: String, images: [[String: Any]]) -> [String: Any] {
@@ -106,35 +104,5 @@ final class RemoteDataLoaderTests: XCTestCase {
             "data": posts
         ]
         return try! JSONSerialization.data(withJSONObject: json)
-    }
-    
-    private class HTTPClientSpy: HTTPClient {
-        private var messages = [(request: URLRequest, completion: (HTTPClient.Result) -> Void)]()
-        private var completedRequests = Set<Int>()
-        
-        var requestedURLs: [URL] {
-            return messages.map { $0.request.url! }
-        }
-        
-        func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-            messages.append((request, completion))
-        }
-        
-        func complete(with error: Error, at index: Int = 0) {
-            guard !completedRequests.contains(index) else { return }
-            completedRequests.insert(index)
-            messages[index].completion(.failure(error))
-        }
-        
-        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
-            guard !completedRequests.contains(index) else { return }
-            completedRequests.insert(index)
-            let response = HTTPURLResponse(
-                url: requestedURLs[index],
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil)!
-            messages[index].completion(.success((data, response)))
-        }
     }
 }
