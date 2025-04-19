@@ -14,7 +14,7 @@ struct PostView: View {
         
         switch image.type {
         case .videoMp4:
-            FeedVideoView(manager: FeedVideoViewModel(url: image.url))
+            FeedVideoView(viewModel: FeedVideoViewModel(url: image.url))
             
         case .imageJPEG, .imagePNG, .imageGIF:
             FeedImageView(url: image.url)

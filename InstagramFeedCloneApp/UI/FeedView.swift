@@ -24,7 +24,7 @@ struct FeedView: View {
                     } else {
                         ForEach(viewModel.posts) { post in
                             Group {
-                                PostView(image: post.images?.first ?? dummyImage)
+                                PostView(image: post.images?.first ?? placeHolder)
                             }
                         }
                     }
@@ -48,8 +48,12 @@ struct FeedView: View {
         }
     }
     
-    private var dummyImage: Image {
-        Image(id: "dfsd3423", type: .imageJPEG, link: "https://i.imgur.com/foheRIC.jpg")
+    private var placeHolder: Image {
+        Image(
+            id: "dfsd3423",
+            type: .imageJPEG,
+            link: "https://i.imgur.com/foheRIC.jpg"
+        )
     }
 }
 

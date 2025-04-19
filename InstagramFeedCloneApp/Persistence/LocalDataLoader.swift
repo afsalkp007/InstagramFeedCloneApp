@@ -7,19 +7,21 @@
 
 import Foundation
 
-final class LocalDataLoader {
+public final class LocalDataLoader {
     private let store: DataStore
     
-    init(store: DataStore) {
+    public init(store: DataStore) {
         self.store = store
     }
 }
 
 extension LocalDataLoader: DataLoader {
-    typealias LoadResult = DataLoader.Result
+    public typealias LoadResult = DataLoader.Result
     
-    func loadPosts(completion: @escaping (LoadResult) -> Void) {
-        store.retrieve { result in
+    public func loadPosts(completion: @escaping (LoadResult) -> Void) {
+        store.retrieve { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success(posts):
                 completion(.success(posts))
@@ -31,13 +33,15 @@ extension LocalDataLoader: DataLoader {
 }
 
 extension LocalDataLoader: DataSaver {
-    typealias SaveResult = DataSaver.Result
+    public typealias SaveResult = DataSaver.Result
     
-    func savePosts(_ posts: [Post], completion: @escaping (SaveResult) -> Void) {
+    public func savePosts(_ posts: [Post], completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedData { [weak self] result in
+            guard let self else { return }
+            
             switch result {
             case .success:
-                self?.store.insert(posts, completion: completion)
+                self.store.insert(posts, completion: completion)
             case let .failure(error):
                 completion(.failure(error))
             }

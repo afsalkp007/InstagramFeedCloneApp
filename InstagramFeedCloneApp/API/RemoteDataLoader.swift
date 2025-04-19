@@ -24,7 +24,9 @@ public final class RemoteDataLoader: DataLoader {
     }
     
     public func loadPosts(completion: @escaping (Result) -> Void) {
-        client.get(for: request) { result in
+        client.get(for: request) { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success((data, response)):
                 completion(Self.map(data, from: response))

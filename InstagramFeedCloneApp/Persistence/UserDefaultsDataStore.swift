@@ -7,21 +7,21 @@
 
 import Foundation
 
-final class UserDefaultsDataStore: DataStore {
+public final class UserDefaultsDataStore: DataStore {
     private let userDefaults: UserDefaults
     private let key: String
     
-    init(userDefaults: UserDefaults = .standard, key: String) {
+    public init(userDefaults: UserDefaults = .standard, key: String) {
         self.userDefaults = userDefaults
         self.key = key
     }
     
-    func deleteCachedData(_ completion: @escaping DeletionCompletion) {
+    public func deleteCachedData(_ completion: @escaping DeletionCompletion) {
         userDefaults.removeObject(forKey: key)
         completion(.success(()))
     }
 
-    func insert(_ feed: [Post], completion: @escaping InsertionCompletion) {
+    public func insert(_ feed: [Post], completion: @escaping InsertionCompletion) {
         do {
             let data = try JSONEncoder().encode(feed)
             userDefaults.set(data, forKey: key)
@@ -33,7 +33,7 @@ final class UserDefaultsDataStore: DataStore {
     
     private struct DataNotFoundError: Error {}
     
-    func retrieve(completion: @escaping RetrievalCompletion) {
+    public func retrieve(completion: @escaping RetrievalCompletion) {
         guard let data = userDefaults.data(forKey: key) else {
             completion(.failure(DataNotFoundError()))
             return
