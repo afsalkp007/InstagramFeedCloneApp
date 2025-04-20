@@ -42,8 +42,8 @@ struct FeedImageView: View {
                     self.image = downloadedImage
                     self.calculateHeight(for: downloadedImage)
                 }
-            case .failure(let error):
-                print("Error loading image: \(error)")
+            case .failure:
+                self.image = UIImage(systemName: "exclamationmark.triangle")
             }
         }
     }

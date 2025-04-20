@@ -15,4 +15,8 @@ extension XCTest {
     func anyURL() -> URL {
         return URL(string: "https://example.com")!
     }
+    
+    func anyData() -> Data {
+        return Data("any data".utf8)
+    }
 }

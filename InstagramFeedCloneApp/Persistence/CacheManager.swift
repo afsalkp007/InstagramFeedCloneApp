@@ -10,6 +10,8 @@ import Foundation
 class CacheManager {
     private let fileManager = FileManager.default
     private let diskCacheDirectory: URL
+    
+    typealias Result = Swift.Result<Data, Error>
 
     private let queue = DispatchQueue(label: Constants.Cache.queue.value, attributes: .concurrent)
     private let cache = NSCache<NSURL, NSData>()
@@ -19,16 +21,19 @@ class CacheManager {
         diskCacheDirectory = cacheDirectory.appendingPathComponent(Constants.Cache.mediaCache.value)
         try? fileManager.createDirectory(at: diskCacheDirectory, withIntermediateDirectories: true)
     }
-    
-    func getCachedData(for url: URL, completion: @escaping (Data?) -> Void) {
+        
+    func getCachedData(for url: URL, completion: @escaping (Result) -> Void) {
         queue.async {
             if let cachedData = self.cache.object(forKey: url as NSURL) {
-                completion(cachedData as Data)
-            } else if let diskData = try? Data(contentsOf: self.diskCachePath(for: url)) {
-                self.cache.setObject(diskData as NSData, forKey: url as NSURL)
-                completion(diskData)
+                completion(.success(cachedData as Data))
             } else {
-                completion(nil)
+                do {
+                    let data = try Data(contentsOf: self.diskCachePath(for: url))
+                    self.cache.setObject(data as NSData, forKey: url as NSURL)
+                    completion(.success(data))
+                } catch {
+                    completion(.failure(error))
+                }
             }
         }
     }

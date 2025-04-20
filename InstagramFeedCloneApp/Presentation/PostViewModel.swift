@@ -41,10 +41,11 @@ class PostViewModel: Identifiable {
     
     func loadVideo(completion: @escaping URLCompletion) {
         let url = self.media.url
-        cacheManager.getCachedData(for: url) { [weak self] data in
-            if let data = data {
+        cacheManager.getCachedData(for: url) { [weak self] result in
+            switch result {
+            case let .success(data):
                 self?.writeDataToTempURL(data: data, url: url, completion: completion)
-            } else {
+            case .failure:
                 self?.fetchVideoData(completion: completion)
             }
         }
@@ -77,12 +78,13 @@ class PostViewModel: Identifiable {
     }
     
     func loadImage(completion: @escaping (Result<Data, Error>) -> Void) {
-        cacheManager.getCachedData(for: media.url) { [weak self] data in
+        cacheManager.getCachedData(for: media.url) { [weak self] result in
             guard let self = self else { return }
             
-            if let data = data {
+            switch result {
+            case let .success(data):
                 completion(.success(data))
-            } else {
+            case .failure:
                 fetchImageData(completion: completion)
             }
         }
