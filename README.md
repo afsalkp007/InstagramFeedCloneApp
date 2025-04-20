@@ -5,7 +5,7 @@
 * Installation by cloning the repository
 * Go to directory
 * use command + B or Product -> Build to build the project
-* Press run icon in Xcode or command + R to run the project on Simulator
+* Select branch `main` and Press run icon in Xcode or command + R to run the project on Simulator
 
 ## Running The Tests Manually 
 
