@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "3D0F0BA6-3920-458A-AEBC-64D195A55C48",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:..\/InstagramFeedClone\/InstagramFeedClone.xcodeproj",
+          "identifier" : "F4A84F862DB5175B00A165C0",
+          "name" : "InstagramFeedClone"
+        },
+        {
+          "containerPath" : "container:InstagramFeedCloneApp.xcodeproj",
+          "identifier" : "F43CB5FA2DB0DF8500858108",
+          "name" : "InstagramFeedCloneApp"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/InstagramFeedClone\/InstagramFeedClone.xcodeproj",
+        "identifier" : "F4A84F8E2DB5175B00A165C0",
+        "name" : "InstagramFeedCloneTests"
+      }
+    }
+  ],
+  "version" : 1
+}
