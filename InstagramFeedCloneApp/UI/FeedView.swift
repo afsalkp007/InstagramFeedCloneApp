@@ -16,17 +16,9 @@ struct FeedView: View {
             ScrollView {
                 LazyVStack(spacing: 16) {
                     if viewModel.showShimmer {
-                        ForEach(0..<5, id: \.self) { _ in
-                            ShimmerView()
-                                .frame(height: 300)
-                                .cornerRadius(10)
-                        }
+                        shimmerViews
                     } else {
-                        ForEach(viewModel.posts) { post in
-                            Group {
-                                PostView(image: post.images?.first ?? placeHolder)
-                            }
-                        }
+                        postViews
                     }
                 }
                 .onAppear {
@@ -48,12 +40,18 @@ struct FeedView: View {
         }
     }
     
-    private var placeHolder: Image {
-        Image(
-            id: "dfsd3423",
-            type: .imageJPEG,
-            link: "https://i.imgur.com/foheRIC.jpg"
-        )
+    private var shimmerViews: some View {
+        ForEach(0..<5, id: \.self) { _ in
+            ShimmerView()
+                .frame(height: 300)
+                .cornerRadius(10)
+        }
     }
+    
+    private var postViews: some View {
+        ForEach(viewModel.viewModels) { viewModel in
+            PostView(viewModel: viewModel)
+        }
+    }
+    
 }
-

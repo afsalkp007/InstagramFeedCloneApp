@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum PostEndPoint {
+public enum PostEndPoint {
     case getPosts(page: Int)
 
-    func url(baseURL: URL) -> URL {
+    public func url(baseURL: URL) -> URL {
         switch self {
         case let .getPosts(page):
             return baseURL.appendingPathComponent("/3/gallery/hot/viral/day/\(page)")
