@@ -10,7 +10,8 @@
 ## Running The Tests Manually 
 
 Follow the steps to get test case reports:
-* Enable coverage Data under test schema section:
+* Enable coverage Data under test schema section
+* Select `InstagramFeedClone` or `CI` scheme to run tests.
 * Select the Test Icon by pressing and holding Xcode Run Icon OR press `Command+U`
 
 # Architecture
