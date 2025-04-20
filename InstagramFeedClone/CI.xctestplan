@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "2E854E34-3F6D-4D2B-A093-4856C82B1135",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/InstagramFeedClone\/InstagramFeedClone.xcodeproj",
+        "identifier" : "F4A84F8E2DB5175B00A165C0",
+        "name" : "InstagramFeedCloneTests"
+      }
+    }
+  ],
+  "version" : 1
+}

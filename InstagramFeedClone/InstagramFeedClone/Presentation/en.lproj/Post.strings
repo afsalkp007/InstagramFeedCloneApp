@@ -1,0 +1,11 @@
+/* 
+  Post.strings
+  InstagramFeedClone
+
+  Created by Mohamed Afsal on 20/04/2025.
+  
+*/
+
+"FEED_VIEW_TITLE" = "Instagram Sample Feed";
+"FEED_VIEW_ERROR" = "Error";
+"FEED_VIEW_OK" = "OK";
