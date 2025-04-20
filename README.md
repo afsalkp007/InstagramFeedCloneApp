@@ -15,4 +15,5 @@ Follow the steps to get test case reports:
 
 # Architecture
 
- This project uses SwiftUI with MVVM design pattern and project is fully developed in Swift.
+ ![Overall Architecture Diagram](https://github.com/user-attachments/assets/2220f6e5-61b7-46e3-9890-66823fd509fc)
+
