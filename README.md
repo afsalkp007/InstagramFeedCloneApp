@@ -12,7 +12,6 @@
 Follow the steps to get test case reports:
 * Enable coverage Data under test schema section:
 * Select the Test Icon by pressing and holding Xcode Run Icon OR press `Command+U`
-* In the Project Navigator under Test Navigator tab, check test status and coverage 
 
 # Architecture
 
