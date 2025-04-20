@@ -28,6 +28,44 @@ public class FeedViewModel {
             mediaLoader: mediaLoader
         )
     }
+    
+    public var title: String {
+        Localized.title.value
+    }
+    
+    public var error: String {
+        Localized.error.value
+    }
+    
+    public var ok: String {
+        Localized.ok.value
+    }
+    
+    private enum Localized {
+        case title
+        case error
+        case ok
+        
+        var value: String {
+            switch self {
+            case .title:
+                return localized(key: "FEED_VIEW_TITLE")
+            case .error:
+                return localized(key: "FEED_VIEW_ERROR")
+            case .ok:
+                return localized(key: "FEED_VIEW_OK")
+            }
+        }
+    }
+    
+    private static func localized(key: String) -> String {
+        return NSLocalizedString(
+            key,
+          tableName: "Post",
+          bundle: Bundle(for: FeedViewModel.self),
+          comment: ""
+        )
+    }
 
     public func fetchPosts() {
         isLoading = true

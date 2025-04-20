@@ -12,7 +12,13 @@
 
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:..\/InstagramFeedClone\/InstagramFeedClone.xcodeproj",
+        "identifier" : "F4A84F8E2DB5175B00A165C0",
+        "name" : "InstagramFeedCloneTests"
+      }
+    }
   ],
   "version" : 1
 }

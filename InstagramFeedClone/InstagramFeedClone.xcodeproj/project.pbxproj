@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F428614E2DB54337006E2F14 /* CI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = F428614D2DB54337006E2F14 /* CI.xctestplan */; };
 		F4A84F902DB5175B00A165C0 /* InstagramFeedClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A84F872DB5175B00A165C0 /* InstagramFeedClone.framework */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F428614D2DB54337006E2F14 /* CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI.xctestplan; sourceTree = "<group>"; };
 		F4A84F872DB5175B00A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A84F8F2DB5175B00A165C0 /* InstagramFeedCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InstagramFeedCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -60,6 +62,7 @@
 		F4A84F7D2DB5175B00A165C0 = {
 			isa = PBXGroup;
 			children = (
+				F428614D2DB54337006E2F14 /* CI.xctestplan */,
 				F4A84F892DB5175B00A165C0 /* InstagramFeedClone */,
 				F4A84F932DB5175B00A165C0 /* InstagramFeedCloneTests */,
 				F4A84F882DB5175B00A165C0 /* Products */,
@@ -177,6 +180,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F428614E2DB54337006E2F14 /* CI.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

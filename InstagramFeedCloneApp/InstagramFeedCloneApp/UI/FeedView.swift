@@ -30,12 +30,12 @@ struct FeedView: View {
                 viewModel.fetchPosts()
             }
             .padding()
-            .navigationTitle("Instagram Sample Feed")
+            .navigationTitle(viewModel.title)
             .alert(item: $viewModel.errorMessage) { errorWrapper in
                 Alert(
-                    title: Text("Error"),
+                    title: Text(viewModel.error),
                     message: Text(errorWrapper.message),
-                    dismissButton: .default(Text("OK"))
+                    dismissButton: .default(Text(viewModel.ok))
                 )
             }
         }

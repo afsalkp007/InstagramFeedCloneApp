@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F4A851082DB51B5A00A165C0 /* InstagramFeedClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */; };
 		F4A851092DB51B5A00A165C0 /* InstagramFeedClone.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F4FA33BB2DB523EE00720AE3 /* CI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = F4FA33BA2DB523EE00720AE3 /* CI.xctestplan */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,7 +29,6 @@
 		F43CB5FB2DB0DF8500858108 /* InstagramFeedCloneApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFeedCloneApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851032DB51B2600A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4FA33BA2DB523EE00720AE3 /* CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -56,7 +54,6 @@
 		F43CB5F22DB0DF8500858108 = {
 			isa = PBXGroup;
 			children = (
-				F4FA33BA2DB523EE00720AE3 /* CI.xctestplan */,
 				F43CB5FD2DB0DF8500858108 /* InstagramFeedCloneApp */,
 				F4A851022DB51B2600A165C0 /* Frameworks */,
 				F43CB5FC2DB0DF8500858108 /* Products */,
@@ -145,7 +142,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4FA33BB2DB523EE00720AE3 /* CI.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,8 +291,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -329,8 +325,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
