@@ -86,10 +86,6 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 5.0)
     }
     
-    private func anyURL() -> URL {
-        return URL(string: "https://example.com")!
-    }
-    
     private func makePost(id: String, images: [[String: Any]]) -> [String: Any] {
         return [
             "id": id,

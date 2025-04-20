@@ -7,10 +7,10 @@
 
 import Foundation
 
-class URLSessionHTTPClient: HTTPClient {
+public final class URLSessionHTTPClient: HTTPClient {
   let session: URLSession
   
-  init(session: URLSession) {
+  public init(session: URLSession) {
     self.session = session
   }
   
@@ -19,7 +19,7 @@ class URLSessionHTTPClient: HTTPClient {
 
 extension URLSessionHTTPClient {
 
-    func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+    public func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         let task = session.dataTask(with: request) { data, response, error in
             completion(Result {
                 if let error = error {

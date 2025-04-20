@@ -11,12 +11,12 @@ class CacheManager {
     private let fileManager = FileManager.default
     private let diskCacheDirectory: URL
 
-    private let queue = DispatchQueue(label: "com.mediaCacheManager.queue", attributes: .concurrent)
+    private let queue = DispatchQueue(label: Constants.Cache.queue.value, attributes: .concurrent)
     private let cache = NSCache<NSURL, NSData>()
     
     init() {
         let cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        diskCacheDirectory = cacheDirectory.appendingPathComponent("MediaCache")
+        diskCacheDirectory = cacheDirectory.appendingPathComponent(Constants.Cache.mediaCache.value)
         try? fileManager.createDirectory(at: diskCacheDirectory, withIntermediateDirectories: true)
     }
     

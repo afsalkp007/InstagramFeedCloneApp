@@ -19,12 +19,12 @@ public final class RemoteMediaDataLoader: MediaDataLoader {
     public func loadMediaData(from url: URL, completion: @escaping (Result) -> Void) {
         let request = URLRequest(url: url)
         httpClient.get(for: request) { result in
-            switch result {
-            case let .success((data, _)):
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            completion(result.mapError { error in
+                return error
+            }.flatMap { data, response in
+                let isValidResponse = response.isOK && !data.isEmpty
+                return isValidResponse ? .success(data) : .failure(URLError(.badServerResponse))
+            })
         }
     }
 }
