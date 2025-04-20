@@ -18,7 +18,6 @@ final class FeedUIComposer {
         let remoteFeedLoader = RemoteDataLoader(request: request, client: httpClient)
         let remoteMediaLoader = RemoteMediaDataLoader(httpClient: httpClient)
         
-        let store = UserDefaultsDataStore(key: Constants.Cache.key.value)
         let localLoader = LocalDataLoader(store: store)
 
         let viewModel = FeedViewModel(
@@ -35,6 +34,10 @@ final class FeedUIComposer {
     private static var httpClient: URLSessionHTTPClient = {
         let session = URLSession(configuration: .ephemeral)
         return URLSessionHTTPClient(session: session)
+    }()
+    
+    private static var store: UserDefaultsDataStore = {
+        return UserDefaultsDataStore(userDefaults: UserDefaults.standard, key: Constants.Cache.key.value)
     }()
     
     private static var baseURL: URL {

@@ -16,6 +16,7 @@ class PostViewModel: Identifiable {
     private let cacheManager: CacheManager
         
     typealias URLCompletion = (Result<URL, Error>) -> Void
+    typealias DataCompletion = (Result<Data, Error>) -> Void
 
     init(media: Media, loader: MediaDataLoader) {
         self.media = media
@@ -63,7 +64,7 @@ class PostViewModel: Identifiable {
                  
     // MARK: - Image Loading
     
-    private func fetchImageData(completion: @escaping (Result<Data, Error>) -> Void) {
+    private func fetchImageData(completion: @escaping DataCompletion) {
         loader.loadMediaData(from: media.url) { [weak self] result in
             guard let self = self else { return }
             
@@ -77,7 +78,7 @@ class PostViewModel: Identifiable {
         }
     }
     
-    func loadImage(completion: @escaping (Result<Data, Error>) -> Void) {
+    func loadImage(completion: @escaping DataCompletion) {
         cacheManager.getCachedData(for: media.url) { [weak self] result in
             guard let self = self else { return }
             

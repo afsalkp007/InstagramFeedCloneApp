@@ -11,7 +11,7 @@ public final class UserDefaultsDataStore: DataStore {
     private let userDefaults: UserDefaults
     private let key: String
     
-    public init(userDefaults: UserDefaults = .standard, key: String) {
+    public init(userDefaults: UserDefaults, key: String) {
         self.userDefaults = userDefaults
         self.key = key
     }

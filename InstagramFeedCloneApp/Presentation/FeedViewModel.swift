@@ -52,13 +52,11 @@ class FeedViewModel {
             return PostViewModel(media: media, loader: mediaPreloader.mediaLoader)
         }
     }
-
+    
     private func preloadMedia(for posts: [Post]) {
         let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
         mediaPreloader.preloadMedia(urls: mediaURLs) {
-            DispatchQueue.main.async {
-                self.isLoading = false
-            }
+            self.isLoading = false
         }
     }
 
