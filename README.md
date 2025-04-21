@@ -6,7 +6,7 @@
 * Go to directory
 * Open the workspace (InstagramCloneApp -> InstagramCloneApp -> InstagramCloneApp.xcworkspace)
 * use command + B or Product -> Build to build the project
-* Select branch `main` and Press run icon in Xcode or command + R to run the project on Simulator
+* Select branch `main`, scheme `InstagramFeedCloneApp` and Press run icon in Xcode or command + R to run the project on Simulator/Device
 
 ## Running The Tests Manually 
 
