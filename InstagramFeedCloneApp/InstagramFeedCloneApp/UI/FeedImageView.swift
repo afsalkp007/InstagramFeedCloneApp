@@ -30,6 +30,9 @@ struct FeedImageView: View {
                     .onAppear {
                         loadImage()
                     }
+                    .onDisappear {
+                        viewModel.cancelMediaLoad()
+                    }
             }
         }
         .frame(height: cellHeight)

@@ -17,7 +17,7 @@ final class FeedUIComposer {
         request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
         
         let remoteFeedLoader = RemoteFeedLoader(request: request, client: httpClient)
-        let remoteMediaLoader = RemoteMediaDataLoader(httpClient: httpClient)
+        let remoteMediaLoader = RemoteMediaDataLoader(client: httpClient)
         
         let localLoader = LocalFeedLoader(store: store)
 

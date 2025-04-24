@@ -25,6 +25,9 @@ struct FeedView: View {
                 .onAppear {
                     viewModel.fetchPosts()
                 }
+                .onDisappear {
+                    viewModel.cancelMediaLoad()
+                }
             }
             .refreshable {
                 viewModel.fetchPosts()

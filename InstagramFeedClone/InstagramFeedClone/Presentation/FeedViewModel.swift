@@ -17,6 +17,7 @@ public class FeedViewModel {
     public var viewModels: [PostViewModel] = []
     public var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
+    private var tasks: [URL: MediaDataLoaderTask] = [:]
 
     private let feedLoader: FeedLoader
     private let mediaLoader: MediaDataLoader
@@ -50,13 +51,18 @@ public class FeedViewModel {
             }
         }
     }
+    
+    public func cancelMediaLoad() {
+        tasks.values.forEach { $0.cancel() }
+        tasks.removeAll()
+    }
 }
 
 extension FeedViewModel {
     private func preloadMedia(for posts: [Post]) {
         let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
-        preloadMedia(urls: mediaURLs) {
-            self.isLoading = false
+        preloadMedia(urls: mediaURLs) { [weak self] in
+            self?.isLoading = false
         }
     }
 
@@ -85,7 +91,7 @@ extension FeedViewModel {
     }
 
     private func loadMedia(for url: URL, completion: @escaping () -> Void) {
-        mediaLoader.loadMediaData(from: url) { [weak self] result in
+        tasks[url] = mediaLoader.loadMediaData(from: url) { [weak self] result in
             guard let self = self else { return }
             
             if case let .success(data) = result {

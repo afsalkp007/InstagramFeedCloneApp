@@ -9,14 +9,25 @@ import Foundation
 import InstagramFeedClone
 
 class HTTPClientSpy: HTTPClient {
+    private struct Task: HTTPClientTask {
+      let callback: () -> Void
+      func cancel() { callback() }
+    }
+
     private var messages = [(request: URLRequest, completion: (HTTPClient.Result) -> Void)]()
+    private(set) var cancelledURLs = [URL]()
     
     var requestedURLs: [URL] {
         return messages.map { $0.request.url! }
     }
     
-    func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+    func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
         messages.append((request, completion))
+        return Task { [weak self] in
+            guard let url = request.url else { return }
+            
+            self?.cancelledURLs.append(url)
+        }
     }
     
     func complete(with error: Error, at index: Int = 0) {

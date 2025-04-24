@@ -18,8 +18,15 @@ public final class URLSessionHTTPClient: HTTPClient {
 }
 
 extension URLSessionHTTPClient {
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+      let wrapper: URLSessionTask
+      
+      func cancel() {
+        wrapper.cancel()
+      }
+    }
 
-    public func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+    public func get(for request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
         let task = session.dataTask(with: request) { data, response, error in
             completion(Result {
                 if let error = error {
@@ -32,5 +39,6 @@ extension URLSessionHTTPClient {
             })
         }
         task.resume()
+        return URLSessionTaskWrapper(wrapper: task)
     }
 }

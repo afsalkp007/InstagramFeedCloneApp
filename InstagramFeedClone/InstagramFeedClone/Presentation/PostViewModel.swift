@@ -13,11 +13,18 @@ public class PostViewModel: Identifiable {
     
     private let loader: MediaDataLoader
     private let cacheManager: CacheService
+    
+    private var tasks: [URL: MediaDataLoaderTask] = [:]
         
     init(media: Media, loader: MediaDataLoader, cacheManager: CacheService) {
         self.media = media
         self.loader = loader
         self.cacheManager = cacheManager
+    }
+    
+    public func cancelMediaLoad() {
+        tasks.values.forEach { $0.cancel() }
+        tasks.removeAll()
     }
 }
 
@@ -25,7 +32,7 @@ extension PostViewModel {
     public typealias URLCompletion = (Result<URL, Error>) -> Void
 
     private func fetchVideoData(completion: @escaping URLCompletion) {
-        loader.loadMediaData(from: media.url) { [weak self] result in
+        tasks[media.url] = loader.loadMediaData(from: media.url) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -68,7 +75,7 @@ extension PostViewModel {
     public typealias DataCompletion = (Result<Data, Error>) -> Void
 
     private func fetchImageData(completion: @escaping DataCompletion) {
-        loader.loadMediaData(from: media.url) { [weak self] result in
+        tasks[media.url] = loader.loadMediaData(from: media.url) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

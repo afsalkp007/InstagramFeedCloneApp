@@ -30,7 +30,7 @@ public final class CacheManager: CacheService {
     }
     
     public func getCachedData(for url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
-        queue.async {
+        queue.async(flags: .barrier) {
             if let cachedData = self.cache.object(forKey: url as NSURL) {
                 completion(.success(cachedData as Data))
             } else {

@@ -16,7 +16,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         let (sut, httpClient) = makeSUT()
         
         // Act
-        sut.loadMediaData(from: url) { _ in }
+        _ = sut.loadMediaData(from: url) { _ in }
         
         // Assert	
         XCTAssertEqual(httpClient.requestedURLs, [url])
@@ -30,7 +30,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         
         // Act
         var receivedError: Error?
-        sut.loadMediaData(from: url) { result in
+        _ = sut.loadMediaData(from: url) { result in
             if case let .failure(error) = result {
                 receivedError = error
             }
@@ -49,7 +49,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         
         // Act
         var receivedData: Data?
-        sut.loadMediaData(from: url) { result in
+        _ = sut.loadMediaData(from: url) { result in
             if case let .success(data) = result {
                 receivedData = data
             }
@@ -64,7 +64,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     
     private func makeSUT() -> (RemoteMediaDataLoader, HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
-        let sut = RemoteMediaDataLoader(httpClient: httpClient)
+        let sut = RemoteMediaDataLoader(client: httpClient)
         return (sut, httpClient)
     }
 }
