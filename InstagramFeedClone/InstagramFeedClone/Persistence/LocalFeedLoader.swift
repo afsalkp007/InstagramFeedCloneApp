@@ -7,18 +7,18 @@
 
 import Foundation
 
-public final class LocalDataLoader {
-    private let store: DataStore
+public final class LocalFeedLoader {
+    private let store: FeedStore
     
-    public init(store: DataStore) {
+    public init(store: FeedStore) {
         self.store = store
     }
 }
 
-extension LocalDataLoader: DataLoader {
-    public typealias LoadResult = DataLoader.Result
+extension LocalFeedLoader: FeedLoader {
+    public typealias LoadResult = FeedLoader.Result
     
-    public func loadPosts(completion: @escaping (LoadResult) -> Void) {
+    public func loadFeed(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard self != nil else { return }
             
@@ -32,8 +32,8 @@ extension LocalDataLoader: DataLoader {
     }
 }
 
-extension LocalDataLoader: DataSaver {
-    public typealias SaveResult = DataSaver.Result
+extension LocalFeedLoader: FeedCache {
+    public typealias SaveResult = FeedCache.Result
     
     public func savePosts(_ posts: [Post], completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedData { [weak self] result in

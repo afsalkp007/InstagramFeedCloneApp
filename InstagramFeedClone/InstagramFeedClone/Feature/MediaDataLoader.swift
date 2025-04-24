@@ -7,8 +7,12 @@
 
 import Foundation
 
+public protocol MediaDataLoaderTask {
+  func cancel()
+}
+
 public protocol MediaDataLoader {
     typealias Result = Swift.Result<Data, Error>
     
-    func loadMediaData(from url: URL, completion: @escaping (Result) -> Void)
+    func loadMediaData(from url: URL, completion: @escaping (Result) -> Void) -> MediaDataLoaderTask
 }

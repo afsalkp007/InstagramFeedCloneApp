@@ -11,7 +11,7 @@ public final class RemoteDataItemMapper {
     
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
         guard response.isOK else {
-            throw RemoteDataLoader.Error.invalidData
+            throw RemoteFeedLoader.Error.invalidData
         }
         
         let root = try JSONDecoder().decode(Root.self, from: data)

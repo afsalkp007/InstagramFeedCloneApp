@@ -8,17 +8,42 @@
 import Foundation
 
 public final class RemoteMediaDataLoader: MediaDataLoader {
-    private let httpClient: HTTPClient
+    private let client: HTTPClient
     
     public typealias Result = MediaDataLoader.Result
     
-    public init(httpClient: HTTPClient) {
-        self.httpClient = httpClient
+    public init(client: HTTPClient) {
+        self.client = client
     }
     
-    public func loadMediaData(from url: URL, completion: @escaping (Result) -> Void) {
+    private final class HTTPClientTaskWrapper: MediaDataLoaderTask {
+      private var completion: ((RemoteMediaDataLoader.Result) -> Void)?
+      
+      var wrapped: HTTPClientTask?
+      
+      init(_ completion: @escaping (RemoteMediaDataLoader.Result) -> Void) {
+        self.completion = completion
+      }
+      
+      func complete(with result: RemoteMediaDataLoader.Result) {
+        completion?(result)
+      }
+      
+      func cancel() {
+        preventFurtherCompletions()
+        wrapped?.cancel()
+      }
+      
+      private func preventFurtherCompletions() {
+        completion = nil
+      }
+    }
+    
+    public func loadMediaData(from url: URL, completion: @escaping (Result) -> Void) -> MediaDataLoaderTask {
+        let task = HTTPClientTaskWrapper(completion)
+        
         let request = URLRequest(url: url)
-        httpClient.get(for: request) { result in
+        task.wrapped = client.get(for: request) { result in
             completion(result.mapError { error in
                 return error
             }.flatMap { data, response in
@@ -26,5 +51,6 @@ public final class RemoteMediaDataLoader: MediaDataLoader {
                 return isValidResponse ? .success(data) : .failure(URLError(.badServerResponse))
             })
         }
+        return task
     }
 }

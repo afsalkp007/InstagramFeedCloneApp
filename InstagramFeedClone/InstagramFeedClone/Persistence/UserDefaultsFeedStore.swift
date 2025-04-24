@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class UserDefaultsDataStore: DataStore {
+public final class UserDefaultsFeedStore: FeedStore {
     private let userDefaults: UserDefaults
     private let key = Constants.Cache.key.value
     

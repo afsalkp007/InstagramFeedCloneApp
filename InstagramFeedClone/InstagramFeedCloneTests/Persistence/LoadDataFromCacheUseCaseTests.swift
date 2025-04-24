@@ -13,7 +13,7 @@ final class LoadDataFromCacheUseCaseTests: XCTestCase {
     func test_loadPosts_requestsCacheRetrieval() {
         let (sut, store) = makeSUT()
 
-        sut.loadPosts { _ in }
+        sut.loadFeed { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
@@ -38,18 +38,18 @@ final class LoadDataFromCacheUseCaseTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalDataLoader, store: DataStoreSpy) {
-        let store = DataStoreSpy()
-        let sut = LocalDataLoader(store: store)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
+        let store = FeedStoreSpy()
+        let sut = LocalFeedLoader(store: store)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(store, file: file, line: line)
         return (sut, store)
     }
     
-    private func expect(_ sut: LocalDataLoader, toCompleteWith expectedResult: LocalDataLoader.LoadResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LocalFeedLoader.LoadResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
 
-        sut.loadPosts { receivedResult in
+        sut.loadFeed { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedPosts), .success(expectedPosts)):
                 XCTAssertEqual(receivedPosts, expectedPosts, file: file, line: line)

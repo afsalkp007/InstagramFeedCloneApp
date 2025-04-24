@@ -34,6 +34,9 @@ struct FeedVideoView: View {
                     .onAppear {
                         loadVideo()
                     }
+                    .onDisappear {
+                        viewModel.cancelMediaLoad()
+                    }
             }
         }
     }

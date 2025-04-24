@@ -12,11 +12,11 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     
     func test_loadMediaData_requestsDataFromURL() {
         // Arrange
-        let url = URL(string: "https://example.com/media")!
+        let url = anyURL()
         let (sut, httpClient) = makeSUT()
         
         // Act
-        sut.loadMediaData(from: url) { _ in }
+        _ = sut.loadMediaData(from: url) { _ in }
         
         // Assert	
         XCTAssertEqual(httpClient.requestedURLs, [url])
@@ -25,12 +25,12 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     func test_loadMediaData_deliversErrorOnClientError() {
         // Arrange
         let (sut, httpClient) = makeSUT()
-        let url = URL(string: "https://example.com/media")!
-        let clientError = NSError(domain: "Test", code: 0)
+        let url = anyURL()
+        let clientError = anyNSError()
         
         // Act
         var receivedError: Error?
-        sut.loadMediaData(from: url) { result in
+        _ = sut.loadMediaData(from: url) { result in
             if case let .failure(error) = result {
                 receivedError = error
             }
@@ -44,12 +44,12 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     func test_loadMediaData_deliversDataOnSuccess() {
         // Arrange
         let (sut, httpClient) = makeSUT()
-        let url = URL(string: "https://example.com/media")!
+        let url = anyURL()
         let expectedData = Data("media data".utf8)
         
         // Act
         var receivedData: Data?
-        sut.loadMediaData(from: url) { result in
+        _ = sut.loadMediaData(from: url) { result in
             if case let .success(data) = result {
                 receivedData = data
             }
@@ -64,7 +64,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     
     private func makeSUT() -> (RemoteMediaDataLoader, HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
-        let sut = RemoteMediaDataLoader(httpClient: httpClient)
+        let sut = RemoteMediaDataLoader(client: httpClient)
         return (sut, httpClient)
     }
 }

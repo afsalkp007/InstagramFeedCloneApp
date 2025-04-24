@@ -17,7 +17,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
 
     func test_getFromURL_performsGETRequestWithURL() {
-        let url = URL(string: "https://example.com")!
+        let url = anyURL()
         let exp = expectation(description: "Wait for request")
 
         URLProtocolStub.observeRequests { request in
@@ -27,13 +27,13 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
 
         let sut = makeSUT()
-        sut.get(for: URLRequest(url: url)) { _ in }
+        _ = sut.get(for: URLRequest(url: url)) { _ in }
 
         wait(for: [exp], timeout: 1.0)
     }
 
     func test_getFromURL_failsOnRequestError() {
-        let requestError = NSError(domain: "Test", code: 0)
+        let requestError = anyNSError()
 
         let receivedError = resultErrorFor(data: nil, response: nil, error: requestError)
 
@@ -73,8 +73,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return URLSessionHTTPClient(session: session)
     }
 
-    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?) -> Error? {
-        let result = resultFor(data: data, response: response, error: error)
+    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, taskHandler: (HTTPClientTask) -> Void = { _ in }) -> Error? {
+        let result = resultFor(data: data, response: response, error: error, taskHandler: taskHandler)
         switch result {
         case let .failure(error):
             return error
@@ -93,15 +93,17 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
     }
 
-    private func resultFor(data: Data?, response: URLResponse?, error: Error?) -> HTTPClient.Result {
+    private func resultFor(data: Data?, response: URLResponse?, error: Error?, taskHandler: (HTTPClientTask) -> Void = { _ in }) -> HTTPClient.Result {
         URLProtocolStub.stub(data: data, response: response, error: error)
+        
         let sut = makeSUT()
         let exp = expectation(description: "Wait for completion")
+        
         var receivedResult: HTTPClient.Result!
-        sut.get(for: URLRequest(url: anyURL())) { result in
+        taskHandler(sut.get(for: URLRequest(url: anyURL())) { result in
             receivedResult = result
             exp.fulfill()
-        }
+        })
         wait(for: [exp], timeout: 1.0)
         return receivedResult
     }

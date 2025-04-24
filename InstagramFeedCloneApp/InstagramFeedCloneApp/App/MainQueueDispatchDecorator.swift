@@ -24,16 +24,16 @@ final class MainQueueDispatchDecorator<T> {
   }
 }
 
-extension MainQueueDispatchDecorator: DataLoader where T == DataLoader {
-    func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        decoratee.loadPosts { [weak self] result in
+extension MainQueueDispatchDecorator: FeedLoader where T == FeedLoader {
+    func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
+        decoratee.loadFeed { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }
 }
 
 extension MainQueueDispatchDecorator: MediaDataLoader where T == MediaDataLoader {
-    func loadMediaData(from url: URL, completion: @escaping (MediaDataLoader.Result) -> Void) {
+    func loadMediaData(from url: URL, completion: @escaping (MediaDataLoader.Result) -> Void) -> any MediaDataLoaderTask {
         decoratee.loadMediaData(from: url) { [weak self] result in
             self?.dispatch { completion(result) }
         }

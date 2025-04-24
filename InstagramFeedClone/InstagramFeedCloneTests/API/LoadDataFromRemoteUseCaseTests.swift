@@ -12,7 +12,7 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_loadPosts_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let clientError = NSError(domain: "Test", code: 0)
+        let clientError = anyNSError()
         
         expect(sut, toCompleteWith: .failure(clientError)) {
             client.complete(with: clientError)
@@ -24,7 +24,7 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         let samples = [199, 201, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWith: .failure(RemoteDataLoader.Error.invalidData)) {
+            expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData)) {
                 client.complete(withStatusCode: code, data: Data(), at: index)
             }
         }
@@ -45,10 +45,10 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_loadPosts_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let client = HTTPClientSpy()
-        var sut: RemoteDataLoader? = RemoteDataLoader(request: URLRequest(url: anyURL()), client: client)
+        var sut: RemoteFeedLoader? = RemoteFeedLoader(request: URLRequest(url: anyURL()), client: client)
         
-        var capturedResults = [RemoteDataLoader.Result]()
-        sut?.loadPosts { capturedResults.append($0) }
+        var capturedResults = [RemoteFeedLoader.Result]()
+        sut?.loadFeed { capturedResults.append($0) }
         
         sut = nil
         client.complete(withStatusCode: 200, data: Data())
@@ -58,19 +58,19 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: RemoteDataLoader, client: HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let request = URLRequest(url: anyURL())
-        let sut = RemoteDataLoader(request: request, client: client)
+        let sut = RemoteFeedLoader(request: request, client: client)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteDataLoader, toCompleteWith expectedResult: RemoteDataLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
         
-        sut.loadPosts { receivedResult in
+        sut.loadFeed { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedPosts), .success(expectedPosts)):
                 XCTAssertEqual(receivedPosts, expectedPosts, file: file, line: line)

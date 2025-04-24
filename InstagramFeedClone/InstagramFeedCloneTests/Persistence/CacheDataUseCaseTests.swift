@@ -60,15 +60,15 @@ class CacheDataUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalDataLoader, store: DataStoreSpy) {
-        let store = DataStoreSpy()
-        let sut = LocalDataLoader(store: store)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
+        let store = FeedStoreSpy()
+        let sut = LocalFeedLoader(store: store)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(store, file: file, line: line)
         return (sut, store)
     }
     
-    private func expect(_ sut: LocalDataLoader, toCompleteSaveWith expectedResult: LocalDataLoader.SaveResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedLoader, toCompleteSaveWith expectedResult: LocalFeedLoader.SaveResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for save completion")
 
         sut.savePosts([makePost(id: "1")]) { receivedResult in
