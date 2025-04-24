@@ -39,7 +39,7 @@ struct FeedImageView: View {
     }
 
     private func loadImage() {
-        viewModel.loadImage { result in
+        viewModel.loadMedia { result in
             switch result {
             case let .success(data):
                 if let downloadedImage = UIImage(data: data) {
@@ -47,7 +47,7 @@ struct FeedImageView: View {
                     self.calculateHeight(for: downloadedImage)
                 }
             case .failure:
-                self.image = UIImage(systemName: "exclamationmark.triangle")
+                self.image = nil
             }
         }
     }

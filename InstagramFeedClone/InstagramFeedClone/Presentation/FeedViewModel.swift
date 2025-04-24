@@ -21,12 +21,10 @@ public class FeedViewModel {
 
     private let feedLoader: FeedLoader
     private let mediaLoader: MediaDataLoader
-    private let cacheManager: CacheService
 
-    public init(feedLoader: FeedLoader, mediaLoader: MediaDataLoader, cacheManager: CacheService) {
+    public init(feedLoader: FeedLoader, mediaLoader: MediaDataLoader) {
         self.feedLoader = feedLoader
         self.mediaLoader = mediaLoader
-        self.cacheManager = cacheManager
     }
 
     public func fetchPosts() {
@@ -42,8 +40,7 @@ public class FeedViewModel {
                     let media = post.images?.first ?? self.placeHolderMedia
                     return PostViewModel(
                         media: media,
-                        loader: self.mediaLoader,
-                        cacheManager: self.cacheManager)
+                        loader: self.mediaLoader)
                 }
                 self.preloadMedia(for: posts)
             case .failure(let error):
@@ -71,32 +68,13 @@ extension FeedViewModel {
 
         for url in urls {
             dispatchGroup.enter()
-            cacheManager.getCachedData(for: url) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success:
-                    dispatchGroup.leave()
-                case .failure:
-                    self.loadMedia(for: url) {
-                        dispatchGroup.leave()
-                    }
-                }
+                        
+            tasks[url] = mediaLoader.loadMediaData(from: url) { result in
+                dispatchGroup.leave()
             }
         }
 
         dispatchGroup.notify(queue: .main) {
-            completion()
-        }
-    }
-
-    private func loadMedia(for url: URL, completion: @escaping () -> Void) {
-        tasks[url] = mediaLoader.loadMediaData(from: url) { [weak self] result in
-            guard let self = self else { return }
-            
-            if case let .success(data) = result {
-                self.cacheManager.cacheData(data, for: url)
-            }
             completion()
         }
     }
