@@ -7,22 +7,29 @@
 
 import Foundation
 
-class CacheManager {
-    private let fileManager = FileManager.default
-    private let diskCacheDirectory: URL
-    
-    typealias Result = Swift.Result<Data, Error>
+public protocol CacheService {
+    func getCachedData(for url: URL, completion: @escaping (Result<Data, Error>) -> Void)
+    func cacheData(_ data: Data, for url: URL)
+    func clearCache()
+}
 
-    private let queue = DispatchQueue(label: Constants.Cache.queue.value, attributes: .concurrent)
-    private let cache = NSCache<NSURL, NSData>()
+public final class CacheManager: CacheService {
+    private let fileManager: FileManager
+    private let diskCacheDirectory: URL
+    private let queue: DispatchQueue
+    private let cache: NSCache<NSURL, NSData>
     
-    init() {
-        let cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        diskCacheDirectory = cacheDirectory.appendingPathComponent(Constants.Cache.mediaCache.value)
+    public init(fileManager: FileManager = .default, cacheDirectory: URL? = nil) {
+        self.fileManager = fileManager
+        self.queue = DispatchQueue(label: Constants.Cache.queue.value, attributes: .concurrent)
+        self.cache = NSCache<NSURL, NSData>()
+        
+        let defaultCacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        self.diskCacheDirectory = cacheDirectory ?? defaultCacheDirectory.appendingPathComponent(Constants.Cache.mediaCache.value)
         try? fileManager.createDirectory(at: diskCacheDirectory, withIntermediateDirectories: true)
     }
-        
-    func getCachedData(for url: URL, completion: @escaping (Result) -> Void) {
+    
+    public func getCachedData(for url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
         queue.async {
             if let cachedData = self.cache.object(forKey: url as NSURL) {
                 completion(.success(cachedData as Data))
@@ -38,17 +45,16 @@ class CacheManager {
         }
     }
     
-    func cacheData(_ data: Data, for url: URL) {
+    public func cacheData(_ data: Data, for url: URL) {
         queue.async(flags: .barrier) {
             self.cache.setObject(data as NSData, forKey: url as NSURL)
             try? data.write(to: self.diskCachePath(for: url))
         }
     }
     
-    func clearCache() {
+    public func clearCache() {
         queue.async(flags: .barrier) {
             self.cache.removeAllObjects()
-            
             do {
                 let fileURLs = try self.fileManager.contentsOfDirectory(at: self.diskCacheDirectory, includingPropertiesForKeys: nil)
                 for fileURL in fileURLs {

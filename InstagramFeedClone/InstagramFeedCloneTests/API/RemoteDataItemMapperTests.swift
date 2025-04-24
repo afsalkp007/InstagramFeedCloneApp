@@ -8,7 +8,7 @@ final class RemoteDataItemMapperTests: XCTestCase {
         let response = HTTPURLResponse(statusCode: 400)
         
         XCTAssertThrowsError(try RemoteDataItemMapper.map(jsonData, from: response)) { error in
-            XCTAssertEqual(error as? RemoteDataLoader.Error, .invalidData)
+            XCTAssertEqual(error as? RemoteFeedLoader.Error, .invalidData)
         }
     }
     
@@ -63,7 +63,7 @@ final class RemoteDataItemMapperTests: XCTestCase {
 extension HTTPURLResponse {
     convenience init(statusCode: Int) {
         self.init(
-            url: URL(string: "https://example.com")!,
+            url: anyURL(),
             statusCode: statusCode,
             httpVersion: nil,
             headerFields: nil

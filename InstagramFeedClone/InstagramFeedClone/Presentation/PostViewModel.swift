@@ -6,25 +6,23 @@
 //
 
 import Foundation
-import AVKit
 
 public class PostViewModel: Identifiable {
     public let id = UUID()
     public let media: Media
     
     private let loader: MediaDataLoader
-    private let cacheManager: CacheManager
+    private let cacheManager: CacheService
         
-    public typealias URLCompletion = (Result<URL, Error>) -> Void
-    public typealias DataCompletion = (Result<Data, Error>) -> Void
-
-    init(media: Media, loader: MediaDataLoader) {
+    init(media: Media, loader: MediaDataLoader, cacheManager: CacheService) {
         self.media = media
         self.loader = loader
-        self.cacheManager = CacheManager()
+        self.cacheManager = cacheManager
     }
-    
-    // MARK: - Video Loading
+}
+
+extension PostViewModel {
+    public typealias URLCompletion = (Result<URL, Error>) -> Void
 
     private func fetchVideoData(completion: @escaping URLCompletion) {
         loader.loadMediaData(from: media.url) { [weak self] result in
@@ -34,7 +32,7 @@ public class PostViewModel: Identifiable {
             case let .success(data):
                 self.cacheManager.cacheData(data, for: media.url)
                 self.writeDataToTempURL(data: data, url: media.url, completion: completion)
-            case .failure(let error):
+            case let .failure(error):
                 completion(.failure(error))
             }
         }
@@ -53,7 +51,6 @@ public class PostViewModel: Identifiable {
     }
     
     private func writeDataToTempURL(data: Data, url: URL, completion: @escaping URLCompletion) {
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
         do {
             try data.write(to: tempURL)
             completion(.success(tempURL))
@@ -61,9 +58,15 @@ public class PostViewModel: Identifiable {
             completion(.failure(error))
         }
     }
-                 
-    // MARK: - Image Loading
     
+    private var tempURL: URL {
+        return FileManager.default.temporaryDirectory.appendingPathComponent(media.url.lastPathComponent)
+    }
+}
+ 
+extension PostViewModel {
+    public typealias DataCompletion = (Result<Data, Error>) -> Void
+
     private func fetchImageData(completion: @escaping DataCompletion) {
         loader.loadMediaData(from: media.url) { [weak self] result in
             guard let self = self else { return }

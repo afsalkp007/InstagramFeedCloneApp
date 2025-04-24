@@ -18,17 +18,99 @@ public class FeedViewModel {
     public var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
 
-    private let feedLoader: DataLoader
-    private let mediaPreloader: MediaPreloader
+    private let feedLoader: FeedLoader
+    private let mediaLoader: MediaDataLoader
+    private let cacheManager: CacheService
 
-    public init(feedLoader: DataLoader, mediaLoader: MediaDataLoader) {
+    public init(feedLoader: FeedLoader, mediaLoader: MediaDataLoader, cacheManager: CacheService) {
         self.feedLoader = feedLoader
-        self.mediaPreloader = MediaPreloader(
-            cacheManager: CacheManager(),
-            mediaLoader: mediaLoader
+        self.mediaLoader = mediaLoader
+        self.cacheManager = cacheManager
+    }
+
+    public func fetchPosts() {
+        isLoading = true
+
+        feedLoader.loadFeed { [weak self] result in
+            guard let self else { return }
+            self.isLoading = false
+
+            switch result {
+            case let .success(posts):
+                self.viewModels = posts.map { post in
+                    let media = post.images?.first ?? self.placeHolderMedia
+                    return PostViewModel(
+                        media: media,
+                        loader: self.mediaLoader,
+                        cacheManager: self.cacheManager)
+                }
+                self.preloadMedia(for: posts)
+            case .failure(let error):
+                self.errorMessage = ErrorWrapper(message: error.localizedDescription)
+            }
+        }
+    }
+}
+
+extension FeedViewModel {
+    private func preloadMedia(for posts: [Post]) {
+        let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
+        preloadMedia(urls: mediaURLs) {
+            self.isLoading = false
+        }
+    }
+
+    func preloadMedia(urls: [URL], completion: @escaping () -> Void) {
+        let dispatchGroup = DispatchGroup()
+
+        for url in urls {
+            dispatchGroup.enter()
+            cacheManager.getCachedData(for: url) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success:
+                    dispatchGroup.leave()
+                case .failure:
+                    self.loadMedia(for: url) {
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            completion()
+        }
+    }
+
+    private func loadMedia(for url: URL, completion: @escaping () -> Void) {
+        mediaLoader.loadMediaData(from: url) { [weak self] result in
+            guard let self = self else { return }
+            
+            if case let .success(data) = result {
+                self.cacheManager.cacheData(data, for: url)
+            }
+            completion()
+        }
+    }
+}
+
+extension FeedViewModel {
+    private var placeHolderMedia: Media {
+        Media(
+            id: "dfsd3423",
+            type: .imageJPEG,
+            link: "https://i.imgur.com/foheRIC.jpg"
         )
     }
-    
+
+    public var showShimmer: Bool {
+        isLoading && viewModels.isEmpty
+    }
+}
+
+extension FeedViewModel {
     public var title: String {
         Localized.title.value
     }
@@ -65,48 +147,5 @@ public class FeedViewModel {
           bundle: Bundle(for: FeedViewModel.self),
           comment: ""
         )
-    }
-
-    public func fetchPosts() {
-        isLoading = true
-
-        feedLoader.loadPosts { [weak self] result in
-            guard let self else { return }
-            self.isLoading = false
-
-            switch result {
-            case let .success(posts):
-                self.viewModels = self.getPostViewModels(from: posts)
-                self.preloadMedia(for: posts)
-            case .failure(let error):
-                self.errorMessage = ErrorWrapper(message: error.localizedDescription)
-            }
-        }
-    }
-
-    private func getPostViewModels(from posts: [Post]) -> [PostViewModel] {
-        posts.map { post in
-            let media = post.images?.first ?? placeHolderMedia
-            return PostViewModel(media: media, loader: mediaPreloader.mediaLoader)
-        }
-    }
-    
-    private func preloadMedia(for posts: [Post]) {
-        let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
-        mediaPreloader.preloadMedia(urls: mediaURLs) {
-            self.isLoading = false
-        }
-    }
-
-    private var placeHolderMedia: Media {
-        Media(
-            id: "dfsd3423",
-            type: .imageJPEG,
-            link: "https://i.imgur.com/foheRIC.jpg"
-        )
-    }
-
-    public var showShimmer: Bool {
-        isLoading && viewModels.isEmpty
     }
 }

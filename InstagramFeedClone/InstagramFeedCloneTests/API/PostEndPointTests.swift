@@ -13,7 +13,7 @@ final class PostEndPointTests: XCTestCase {
 
     func testGetPostsURL() {
         // Arrange
-        let baseURL = URL(string: "https://api.example.com")!
+        let baseURL = anyURL()
         let page = 1
         let endpoint = PostEndPoint.getPosts(page: page)
         
@@ -21,6 +21,6 @@ final class PostEndPointTests: XCTestCase {
         let url = endpoint.url(baseURL: baseURL)
         
         // Assert
-        XCTAssertEqual(url.absoluteString, "https://api.example.com/3/gallery/hot/viral/day/1")
+        XCTAssertEqual(url.absoluteString, "https://example.com/3/gallery/hot/viral/day/1")
     }
 }

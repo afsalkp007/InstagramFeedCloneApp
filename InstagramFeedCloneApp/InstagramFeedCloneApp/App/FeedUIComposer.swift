@@ -16,29 +16,33 @@ final class FeedUIComposer {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
         
-        let remoteFeedLoader = RemoteDataLoader(request: request, client: httpClient)
+        let remoteFeedLoader = RemoteFeedLoader(request: request, client: httpClient)
         let remoteMediaLoader = RemoteMediaDataLoader(httpClient: httpClient)
         
-        let localLoader = LocalDataLoader(store: store)
+        let localLoader = LocalFeedLoader(store: store)
 
         let viewModel = FeedViewModel(
             feedLoader: MainQueueDispatchDecorator(
-            decoratee: DataLoaderWithFallbackComposite(
+            decoratee: RemoteFeedLoaderWithFallbackComposite(
                 primary: FeedLoaderCacheDecorator(
                     decoratee: remoteFeedLoader,
                     cache: localLoader),
                 fallback: localLoader)),
-            mediaLoader: MainQueueDispatchDecorator(decoratee: remoteMediaLoader))
+            mediaLoader: MainQueueDispatchDecorator(decoratee: remoteMediaLoader), cacheManager: cacheService)
         return FeedView(viewModel: viewModel)
     }
+    
+    private static var cacheService: CacheService = {
+        return CacheManager()
+    }()
     
     private static var httpClient: URLSessionHTTPClient = {
         let session = URLSession(configuration: .ephemeral)
         return URLSessionHTTPClient(session: session)
     }()
     
-    private static var store: UserDefaultsDataStore = {
-        return UserDefaultsDataStore(userDefaults: UserDefaults.standard)
+    private static var store: UserDefaultsFeedStore = {
+        return UserDefaultsFeedStore(userDefaults: UserDefaults.standard)
     }()
     
     private static var baseURL: URL {

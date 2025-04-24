@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol DataStore {
+public protocol FeedStore {
     typealias DeletionResult = Result<Void, Error>
     typealias DeletionCompletion = (DeletionResult) -> Void
 

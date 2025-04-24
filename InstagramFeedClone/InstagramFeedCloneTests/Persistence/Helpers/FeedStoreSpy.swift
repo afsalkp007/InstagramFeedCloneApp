@@ -7,7 +7,7 @@
 
 import InstagramFeedClone
 
-class DataStoreSpy: DataStore {
+class FeedStoreSpy: FeedStore {
     enum Message: Equatable {
         case retrieve
         case deleteCachedData

@@ -12,7 +12,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     
     func test_loadMediaData_requestsDataFromURL() {
         // Arrange
-        let url = URL(string: "https://example.com/media")!
+        let url = anyURL()
         let (sut, httpClient) = makeSUT()
         
         // Act
@@ -25,8 +25,8 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     func test_loadMediaData_deliversErrorOnClientError() {
         // Arrange
         let (sut, httpClient) = makeSUT()
-        let url = URL(string: "https://example.com/media")!
-        let clientError = NSError(domain: "Test", code: 0)
+        let url = anyURL()
+        let clientError = anyNSError()
         
         // Act
         var receivedError: Error?
@@ -44,7 +44,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     func test_loadMediaData_deliversDataOnSuccess() {
         // Arrange
         let (sut, httpClient) = makeSUT()
-        let url = URL(string: "https://example.com/media")!
+        let url = anyURL()
         let expectedData = Data("media data".utf8)
         
         // Act

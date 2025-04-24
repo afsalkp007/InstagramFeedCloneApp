@@ -8,23 +8,23 @@
 import Foundation
 import InstagramFeedClone
 
-final class DataLoaderWithFallbackComposite: DataLoader {
-    private let primary: DataLoader
-    private let fallback: DataLoader
+final class RemoteFeedLoaderWithFallbackComposite: FeedLoader {
+    private let primary: FeedLoader
+    private let fallback: FeedLoader
     
-    init(primary: DataLoader, fallback: DataLoader) {
+    init(primary: FeedLoader, fallback: FeedLoader) {
         self.primary = primary
         self.fallback = fallback
     }
     
-    func loadPosts(completion: @escaping (DataLoader.Result) -> Void) {
-        primary.loadPosts { [weak self] result in
+    func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
+        primary.loadFeed { [weak self] result in
             switch result {
             case .success:
                 completion(result)
                 
             case .failure:
-                self?.fallback.loadPosts(completion: completion)
+                self?.fallback.loadFeed(completion: completion)
             }
         }
     }
