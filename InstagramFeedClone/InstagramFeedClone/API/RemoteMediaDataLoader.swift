@@ -16,6 +16,11 @@ public final class RemoteMediaDataLoader: MediaDataLoader {
         self.client = client
     }
     
+    public enum Error: Swift.Error {
+      case connectivity
+      case invalidData
+    }
+    
     private final class HTTPClientTaskWrapper: MediaDataLoaderTask {
       private var completion: ((RemoteMediaDataLoader.Result) -> Void)?
       
@@ -43,13 +48,16 @@ public final class RemoteMediaDataLoader: MediaDataLoader {
         let task = HTTPClientTaskWrapper(completion)
         
         let request = URLRequest(url: url)
-        task.wrapped = client.get(for: request) { result in
-            completion(result.mapError { error in
-                return error
-            }.flatMap { data, response in
-                let isValidResponse = response.isOK && !data.isEmpty
-                return isValidResponse ? .success(data) : .failure(URLError(.badServerResponse))
-            })
+        task.wrapped = client.get(for: request) { [weak self] result in
+            
+            guard self != nil else { return }
+            
+            task.complete(with: result
+                .mapError{ _ in return Error.connectivity }
+                .flatMap { data, response in
+                    let isValidResponse = response.isOK && !data.isEmpty
+                    return isValidResponse ? .success(data) : .failure(Error.invalidData)
+                })
         }
         return task
     }

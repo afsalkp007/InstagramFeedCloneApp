@@ -42,12 +42,33 @@ struct FeedVideoView: View {
     }
     
     private func loadVideo() {
-        viewModel.loadVideo { result in
-            if case let .success(url) = result {
-                self.player = AVPlayer(url: url)
-                self.calculateHeight(for: url)
+        let url = viewModel.media.url
+        viewModel.loadMedia { result in
+            if case let .success(data) = result {
+                writeDataToTempURL(data: data, url: url) { result in
+                    if case let .success(url) = result {
+                        self.player = AVPlayer(url: url)
+                        self.calculateHeight(for: url)
+                    }
+                }
+                    
             }
         }
+    }
+    
+    public typealias URLCompletion = (Result<URL, Error>) -> Void
+    
+    private func writeDataToTempURL(data: Data, url: URL, completion: @escaping (URLCompletion)) {
+        do {
+            try data.write(to: tempURL)
+            completion(.success(tempURL))
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
+    private var tempURL: URL {
+        return FileManager.default.temporaryDirectory.appendingPathComponent(viewModel.media.url.lastPathComponent)
     }
     
     private func calculateHeight(for videoURL: URL) {

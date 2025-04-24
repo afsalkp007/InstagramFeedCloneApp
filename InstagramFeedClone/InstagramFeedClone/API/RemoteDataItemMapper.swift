@@ -30,7 +30,7 @@ public struct Media: Codable, Identifiable, Equatable {
     public let type: MediaType
     public let link: String
     
-    var url: URL {
+    public var url: URL {
         URL(string: link)!
     }
 }

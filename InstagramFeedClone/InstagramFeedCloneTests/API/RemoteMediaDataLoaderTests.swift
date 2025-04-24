@@ -11,60 +11,64 @@ import InstagramFeedClone
 final class RemoteMediaDataLoaderTests: XCTestCase {
     
     func test_loadMediaData_requestsDataFromURL() {
-        // Arrange
         let url = anyURL()
-        let (sut, httpClient) = makeSUT()
+        let (sut, client) = makeSUT()
         
-        // Act
         _ = sut.loadMediaData(from: url) { _ in }
         
-        // Assert	
-        XCTAssertEqual(httpClient.requestedURLs, [url])
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadMediaData_deliversErrorOnClientError() {
-        // Arrange
-        let (sut, httpClient) = makeSUT()
-        let url = anyURL()
+        let (sut, client) = makeSUT()
         let clientError = anyNSError()
         
-        // Act
-        var receivedError: Error?
-        _ = sut.loadMediaData(from: url) { result in
-            if case let .failure(error) = result {
-                receivedError = error
-            }
-        }
-        httpClient.complete(with: clientError)
-        
-        // Assert
-        XCTAssertEqual(receivedError as NSError?, clientError)
+        expect(sut, toCompleteWith: .failure(RemoteMediaDataLoader.Error.connectivity), when: {
+            client.complete(with: clientError)
+        })
     }
     
     func test_loadMediaData_deliversDataOnSuccess() {
-        // Arrange
-        let (sut, httpClient) = makeSUT()
-        let url = anyURL()
+        let (sut, client) = makeSUT()
         let expectedData = Data("media data".utf8)
         
-        // Act
-        var receivedData: Data?
-        _ = sut.loadMediaData(from: url) { result in
-            if case let .success(data) = result {
-                receivedData = data
-            }
-        }
-        httpClient.complete(withStatusCode: 200, data: expectedData)
-        
-        // Assert
-        XCTAssertEqual(receivedData, expectedData)
+        expect(sut, toCompleteWith: .success(expectedData), when: {
+            client.complete(withStatusCode: 200, data: expectedData)
+        })
     }
     
     // MARK: - Helpers
     
-    private func makeSUT() -> (RemoteMediaDataLoader, HTTPClientSpy) {
-        let httpClient = HTTPClientSpy()
-        let sut = RemoteMediaDataLoader(client: httpClient)
-        return (sut, httpClient)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (RemoteMediaDataLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemoteMediaDataLoader(client: client)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
+        return (sut, client)
+    }
+    
+    private func expect(_ sut: RemoteMediaDataLoader, toCompleteWith expectedResult: MediaDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+      let url = URL(string: "https://a-given-url.com")!
+      
+      let exp = expectation(description: "Wait for load completion")
+      
+      _ = sut.loadMediaData(from: url) { receivedResult in
+        switch (receivedResult, expectedResult) {
+        case let (.success(receivedData), .success(expectedData)):
+          XCTAssertEqual(receivedData, expectedData, file: file, line: line)
+          
+        case let (.failure(receivedError as RemoteMediaDataLoader.Error), .failure(expectedError as RemoteMediaDataLoader.Error)):
+          XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+          
+        default:
+          XCTFail("Expected \(expectedResult), got \(receivedResult) instead.", file: file, line: line)
+        }
+        
+        exp.fulfill()
+      }
+      
+      action()
+      
+      wait(for: [exp], timeout: 1.0)
     }
 }
