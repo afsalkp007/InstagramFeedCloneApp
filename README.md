@@ -21,4 +21,5 @@ Follow the steps to get test case reports:
 
 # Dependency Diagram
 
-![Detailed Dependency Diagram](https://github.com/user-attachments/assets/b15db26f-966a-40f9-8424-f1a2584e4a45)
+![Dependency](https://github.com/user-attachments/assets/db663ace-af81-46ff-b5c7-5aee7396b33d)
+
