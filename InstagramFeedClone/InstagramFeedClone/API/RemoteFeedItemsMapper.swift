@@ -7,9 +7,9 @@
 
 import Foundation
 
-public final class RemoteDataItemMapper {
+final class RemoteFeedItemsMapper {
     
-    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
         guard response.isOK else {
             throw RemoteFeedLoader.Error.invalidData
         }
@@ -20,8 +20,6 @@ public final class RemoteDataItemMapper {
 }
 
 struct Root: Codable {
-    let success: Bool
-    let status: Int
     let data: [Post]
 }
 
@@ -29,6 +27,12 @@ public struct Media: Codable, Identifiable, Equatable {
     public let id: String
     public let type: MediaType
     public let link: String
+    
+        public init(id: String, type: MediaType, link: String) {
+            self.id = id
+            self.type = type
+            self.link = link
+        }
     
     public var url: URL {
         URL(string: link)!

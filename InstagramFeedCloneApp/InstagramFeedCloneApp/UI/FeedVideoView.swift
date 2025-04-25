@@ -19,24 +19,16 @@ struct FeedVideoView: View {
         Group {
             if let player = player {
                 VideoPlayer(player: player)
-                    .onAppear {
-                        player.play()
-                    }
-                    .onDisappear {
-                        player.pause()
-                    }
+                    .onAppear { player.play() }
+                    .onDisappear { player.pause() }
                     .frame(height: cellHeight)
                     .cornerRadius(10)
             } else {
                 ShimmerView()
                     .frame(height: cellHeight)
                     .cornerRadius(10)
-                    .onAppear {
-                        loadVideo()
-                    }
-                    .onDisappear {
-                        viewModel.cancelMediaLoad()
-                    }
+                    .onAppear { loadVideo() }
+                    .onDisappear { viewModel.cancelMediaLoad() }
             }
         }
     }

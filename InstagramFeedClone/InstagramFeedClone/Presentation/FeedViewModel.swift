@@ -53,6 +53,10 @@ public class FeedViewModel {
         tasks.values.forEach { $0.cancel() }
         tasks.removeAll()
     }
+    
+    deinit {
+        cancelMediaLoad()
+    }
 }
 
 extension FeedViewModel {
