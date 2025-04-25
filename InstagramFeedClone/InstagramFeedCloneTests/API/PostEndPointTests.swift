@@ -13,14 +13,17 @@ final class PostEndPointTests: XCTestCase {
 
     func testGetPostsURL() {
         // Arrange
-        let baseURL = anyURL()
+        let baseURL = URL(string: "https://base-url.com")!
         let page = 1
         let endpoint = PostEndPoint.getPosts(page: page)
         
         // Act
-        let url = endpoint.url(baseURL: baseURL)
+        let received = endpoint.url(baseURL: baseURL)
         
         // Assert
-        XCTAssertEqual(url.absoluteString, "https://example.com/3/gallery/hot/viral/day/1")
+        XCTAssertEqual(received.scheme, "https", "scheme")
+        XCTAssertEqual(received.host, "base-url.com", "host")
+        XCTAssertEqual(received.path, "/3/gallery/hot/viral/day/1", "path")
+        XCTAssertEqual(received.absoluteString, "https://base-url.com/3/gallery/hot/viral/day/1")
     }
 }

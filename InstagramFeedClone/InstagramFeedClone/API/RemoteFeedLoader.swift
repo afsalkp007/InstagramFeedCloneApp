@@ -15,6 +15,7 @@ public final class RemoteFeedLoader: FeedLoader {
     public typealias Result = FeedLoader.Result
     
     public enum Error: Swift.Error {
+        case connectivity
         case invalidData
     }
     
@@ -31,15 +32,15 @@ public final class RemoteFeedLoader: FeedLoader {
             case let .success((data, response)):
                 completion(Self.map(data, from: response))
                 
-            case .failure(let error):
-                completion(.failure(error))
+            case .failure:
+                completion(.failure(Error.connectivity))
             }
         }
     }
     
     public static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         do {
-            let posts = try RemoteDataItemMapper.map(data, from: response)
+            let posts = try RemoteFeedItemsMapper.map(data, from: response)
             return .success(posts)
         } catch {
             return .failure(error)

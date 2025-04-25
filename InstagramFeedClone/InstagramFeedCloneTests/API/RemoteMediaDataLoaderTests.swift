@@ -23,7 +23,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         let clientError = anyNSError()
         
-        expect(sut, toCompleteWith: .failure(RemoteMediaDataLoader.Error.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
             client.complete(with: clientError)
         })
     }
@@ -39,7 +39,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (RemoteMediaDataLoader, HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (MediaDataLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteMediaDataLoader(client: client)
         trackForMemoryLeaks(sut, file: file, line: line)
@@ -47,7 +47,11 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteMediaDataLoader, toCompleteWith expectedResult: MediaDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func failure(_ error: RemoteMediaDataLoader.Error) -> RemoteMediaDataLoader.Result {
+        return .failure(error)
+    }
+    
+    private func expect(_ sut: MediaDataLoader, toCompleteWith expectedResult: MediaDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
       let url = URL(string: "https://a-given-url.com")!
       
       let exp = expectation(description: "Wait for load completion")

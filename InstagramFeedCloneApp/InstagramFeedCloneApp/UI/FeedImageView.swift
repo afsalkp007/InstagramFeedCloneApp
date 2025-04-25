@@ -27,12 +27,8 @@ struct FeedImageView: View {
                 ShimmerView()
                     .frame(height: cellHeight)
                     .cornerRadius(10)
-                    .onAppear {
-                        loadImage()
-                    }
-                    .onDisappear {
-                        viewModel.cancelMediaLoad()
-                    }
+                    .onAppear { loadImage() }
+                    .onDisappear { viewModel.cancelMediaLoad() }
             }
         }
         .frame(height: cellHeight)

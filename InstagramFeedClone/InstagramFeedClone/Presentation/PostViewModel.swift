@@ -24,6 +24,10 @@ public class PostViewModel: Identifiable {
         tasks.values.forEach { $0.cancel() }
         tasks.removeAll()
     }
+    
+    deinit {
+        cancelMediaLoad()
+    }
 }
  
 extension PostViewModel {
