@@ -3,7 +3,6 @@
 # Installation
 
 * Installation by cloning the repository
-* Go to directory
 * Open the workspace (InstagramCloneApp -> InstagramCloneApp -> InstagramCloneApp.xcworkspace)
 * use command + B or Product -> Build to build the project
 * Select branch `main`, scheme `InstagramFeedCloneApp` and Press run icon in Xcode or command + R to run the project on Simulator/Device
@@ -11,7 +10,6 @@
 ## Running The Tests Manually 
 
 Follow the steps to get test case reports:
-* Enable coverage Data under test schema section
 * Select `InstagramFeedClone` or `CI` scheme to run tests.
 * Select the Test Icon by pressing and holding Xcode Run Icon OR press `Command+U`
 
