@@ -14,7 +14,7 @@ public struct ErrorWrapper: Identifiable {
 
 @Observable
 public class FeedViewModel {
-    public var viewModels: [PostViewModel] = []
+    public var viewModels: [ItemViewModel] = []
     public var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
     private var tasks: [URL: MediaDataLoaderTask] = [:]
@@ -27,7 +27,7 @@ public class FeedViewModel {
         self.mediaLoader = mediaLoader
     }
 
-    public func fetchPosts() {
+    public func fetchFeed() {
         isLoading = true
 
         feedLoader.loadFeed { [weak self] result in
@@ -35,14 +35,13 @@ public class FeedViewModel {
             self.isLoading = false
 
             switch result {
-            case let .success(posts):
-                self.viewModels = posts.map { post in
-                    let media = post.images?.first ?? self.placeHolderMedia
-                    return PostViewModel(
-                        media: media,
+            case let .success(feed):
+                self.viewModels = feed.map { item in
+                    return ItemViewModel(
+                        item: item,
                         loader: self.mediaLoader)
                 }
-                self.preloadMedia(for: posts)
+                self.preloadMedia(for: feed)
             case .failure(let error):
                 self.errorMessage = ErrorWrapper(message: error.localizedDescription)
             }
@@ -60,8 +59,8 @@ public class FeedViewModel {
 }
 
 extension FeedViewModel {
-    private func preloadMedia(for posts: [Post]) {
-        let mediaURLs = posts.compactMap { $0.images?.first?.link }.compactMap { URL(string: $0) }
+    private func preloadMedia(for feed: [FeedItem]) {
+        let mediaURLs = feed.compactMap { $0.url }
         preloadMedia(urls: mediaURLs) { [weak self] in
             self?.isLoading = false
         }
@@ -85,13 +84,6 @@ extension FeedViewModel {
 }
 
 extension FeedViewModel {
-    private var placeHolderMedia: Media {
-        Media(
-            id: "dfsd3423",
-            type: .imageJPEG,
-            link: "https://i.imgur.com/foheRIC.jpg"
-        )
-    }
 
     public var showShimmer: Bool {
         isLoading && viewModels.isEmpty
@@ -131,7 +123,7 @@ extension FeedViewModel {
     private static func localized(key: String) -> String {
         return NSLocalizedString(
             key,
-          tableName: "Post",
+          tableName: "Item",
           bundle: Bundle(for: FeedViewModel.self),
           comment: ""
         )

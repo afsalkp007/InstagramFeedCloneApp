@@ -10,7 +10,7 @@ import InstagramFeedClone
 
 final class LoadDataFromRemoteUseCaseTests: XCTestCase {
     
-    func test_loadPosts_deliversConnectivityErrorOnClientError() {
+    func test_loadFeed_deliversConnectivityErrorOnClientError() {
         let (sut, client) = makeSUT()
         let clientError = anyNSError()
         
@@ -19,7 +19,7 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         }
     }
     
-    func test_loadPosts_deliversErrorOnNon200HTTPResponse() {
+    func test_loadFeed_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
         let samples = [199, 201, 400, 500]
         
@@ -30,26 +30,28 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         }
     }
     
-    func test_loadPosts_deliversPostsOn200HTTPResponseWithValidData() {
+    func test_loadFeed_deliversFeedOn200HTTPResponseWithValidData() {
         let (sut, client) = makeSUT()
         
-        let item1 = makePost(id: "1", images: [
-            Media(id: "1", type: .imageGIF, link: "https://example.com/image1.jpg"),
-            Media(id: "2", type: .imageGIF, link: "https://example.com/image2.jpg")])
+        let item1 = makeFeedItem(
+            id: "1",
+            type: .imageGIF,
+            url: URL(string: "https://example.com/image1.jpg")!)
         
-        let item2 = makePost(id: "2", images: [
-            Media(id: "1", type: .imageGIF, link: "https://example.com/image1.jpg"),
-            Media(id: "2", type: .imageGIF, link: "https://example.com/image2.jpg")])
+        let item2 = makeFeedItem(
+            id: "2",
+            type: .imageJPEG,
+            url: URL(string: "https://example.com/image2.jpg")!)
         
-        let posts: [Post] = [item1.model, item2.model]
+        let feed: [FeedItem] = [item1.model, item2.model]
         
-        expect(sut, toCompleteWith: .success(posts)) {
-            let data = makeValidJSON(posts: [item1.json, item2.json])
+        expect(sut, toCompleteWith: .success(feed)) {
+            let data = makeValidJSON(feed: [item1.json, item2.json])
             client.complete(withStatusCode: 200, data: data)
         }
     }
     
-    func test_loadPosts_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+    func test_loadFeed_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let client = HTTPClientSpy()
         var sut: RemoteFeedLoader? = RemoteFeedLoader(request: URLRequest(url: anyURL()), client: client)
         
@@ -82,8 +84,8 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         
         sut.loadFeed { receivedResult in
             switch (receivedResult, expectedResult) {
-            case let (.success(receivedPosts), .success(expectedPosts)):
-                XCTAssertEqual(receivedPosts, expectedPosts, file: file, line: line)
+            case let (.success(receivedFeed), .success(expectedFeed)):
+                XCTAssertEqual(receivedFeed, expectedFeed, file: file, line: line)
             case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
                 XCTAssertEqual(receivedError, expectedError, file: file, line: line)
             default:
@@ -96,21 +98,16 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 5.0)
     }
     
-    private func makePost(id: String, images: [Media]) -> (model: Post, json: [String: Any]) {
-        let model = Post(id: id, images: images)
+    private func makeFeedItem(id: String, type: MediaType, url: URL) -> (model: FeedItem, json: [String: Any]) {
+        let model = FeedItem(id: id, type: type, url: url)
         
         let json: [String: Any] = [
             "id": id,
             "images": [
                 [
-                    "id": images[0].id,
-                    "type": images[0].type.rawValue,
-                    "link": images[0].link
-                ],
-                [
-                    "id": images[1].id,
-                    "type": images[1].type.rawValue,
-                    "link": images[1].link
+                    "id": id,
+                    "type": type.rawValue,
+                    "link": url.absoluteString
                 ]
             ]
         ]
@@ -118,9 +115,9 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         return (model, json)
     }
     
-    private func makeValidJSON(posts: [[String: Any]]) -> Data {
+    private func makeValidJSON(feed: [[String: Any]]) -> Data {
         let json: [String: Any] = [
-            "data": posts
+            "data": feed
         ]
         return try! JSONSerialization.data(withJSONObject: json)
     }

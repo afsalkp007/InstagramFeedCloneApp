@@ -19,18 +19,18 @@ struct FeedView: View {
                     if viewModel.showShimmer {
                         shimmerViews
                     } else {
-                        postViews
+                        itemViews
                     }
                 }
                 .onAppear {
-                    viewModel.fetchPosts()
+                    viewModel.fetchFeed()
                 }
                 .onDisappear {
                     viewModel.cancelMediaLoad()
                 }
             }
             .refreshable {
-                viewModel.fetchPosts()
+                viewModel.fetchFeed()
             }
             .padding()
             .navigationTitle(viewModel.title)
@@ -52,9 +52,9 @@ struct FeedView: View {
         }
     }
     
-    private var postViews: some View {
+    private var itemViews: some View {
         ForEach(viewModel.viewModels) { viewModel in
-            PostView(viewModel: viewModel)
+            ItemView(viewModel: viewModel)
         }
     }
 }

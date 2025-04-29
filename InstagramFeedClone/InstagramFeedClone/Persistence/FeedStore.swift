@@ -14,12 +14,12 @@ public protocol FeedStore {
     typealias InsertionResult = Result<Void, Error>
     typealias InsertionCompletion = (InsertionResult) -> Void
     
-    typealias RetrievalResult = Result<[Post], Error>
+    typealias RetrievalResult = Result<[LocalFeedItem]?, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void
     
     func deleteCachedData(_ completion: @escaping DeletionCompletion)
     
-    func insert(_ feed: [Post], completion: @escaping InsertionCompletion)
+    func insert(_ feed: [LocalFeedItem], completion: @escaping InsertionCompletion)
     
     func retrieve(completion: @escaping RetrievalCompletion)
 }

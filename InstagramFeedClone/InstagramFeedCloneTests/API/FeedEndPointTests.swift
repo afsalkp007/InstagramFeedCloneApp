@@ -1,5 +1,5 @@
 //
-//  PostEndPointTests.swift
+//  FeedEndPointTests.swift
 //  InstagramFeedCloneAppTests
 //
 //  Created by Mohamed Afsal on 20/04/2025.
@@ -9,13 +9,13 @@ import XCTest
 
 import InstagramFeedClone
 
-final class PostEndPointTests: XCTestCase {
+final class FeedEndPointTests: XCTestCase {
 
-    func testGetPostsURL() {
+    func testGetFeedURL() {
         // Arrange
         let baseURL = URL(string: "https://base-url.com")!
         let page = 1
-        let endpoint = PostEndPoint.getPosts(page: page)
+        let endpoint = FeedEndPoint.getFeed(page: page)
         
         // Act
         let received = endpoint.url(baseURL: baseURL)

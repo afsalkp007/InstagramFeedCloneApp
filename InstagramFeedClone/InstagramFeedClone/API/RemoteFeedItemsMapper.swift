@@ -9,7 +9,7 @@ import Foundation
 
 final class RemoteFeedItemsMapper {
     
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [Post] {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [RemoteFeedItem] {
         guard response.isOK else {
             throw RemoteFeedLoader.Error.invalidData
         }
@@ -20,29 +20,32 @@ final class RemoteFeedItemsMapper {
 }
 
 struct Root: Codable {
-    let data: [Post]
+    let data: [RemoteFeedItem]
 }
 
-public struct Media: Codable, Identifiable, Equatable {
+struct RemoteFeedItem: Codable {
     public let id: String
-    public let type: MediaType
-    public let link: String
+    public let images: [Media]?
     
-        public init(id: String, type: MediaType, link: String) {
-            self.id = id
-            self.type = type
-            self.link = link
-        }
+    init(id: String, images: [Media]?) {
+        self.id = id
+        self.images = images
+    }
     
-    public var url: URL {
-        URL(string: link)!
+    var item: FeedItem? {
+        guard let type = images?.first?.type, let mediaType = MediaType(rawValue: type), let url = URL(string: images?.first?.link ?? "") else { return nil }
+        return FeedItem(id: id, type: mediaType, url: url)
     }
 }
 
-public enum MediaType: String, Codable {
-    case imageJPEG = "image/jpeg"
-    case imagePNG = "image/png"
-    case imageGIF = "image/gif"
-    case videoMp4 = "video/mp4"
+struct Media: Codable, Identifiable, Equatable {
+    let id: String
+    let type: String
+    let link: String
+    
+    init(id: String, type: String, link: String) {
+        self.id = id
+        self.type = type
+        self.link = link
+    }
 }
-
