@@ -1,5 +1,5 @@
 //
-//  VideoPostView.swift
+//  FeedVideoView.swift
 //  InstagramFeedCloneApp
 //
 //  Created by Mohamed Afsal on 17/04/2025.
@@ -10,7 +10,7 @@ import AVKit
 import InstagramFeedClone
 
 struct FeedVideoView: View {
-    let viewModel: PostViewModel
+    let viewModel: ItemViewModel
     
     @State private var player: AVPlayer?
     @State private var cellHeight: CGFloat = 300
@@ -34,7 +34,7 @@ struct FeedVideoView: View {
     }
     
     private func loadVideo() {
-        let url = viewModel.media.url
+        let url = viewModel.item.url
         viewModel.loadMedia { result in
             if case let .success(data) = result {
                 writeDataToTempURL(data: data, url: url) { result in
@@ -60,7 +60,7 @@ struct FeedVideoView: View {
     }
     
     private var tempURL: URL {
-        return FileManager.default.temporaryDirectory.appendingPathComponent(viewModel.media.url.lastPathComponent)
+        return FileManager.default.temporaryDirectory.appendingPathComponent(viewModel.item.url.lastPathComponent)
     }
     
     private func calculateHeight(for videoURL: URL) {

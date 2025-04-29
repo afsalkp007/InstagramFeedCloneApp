@@ -8,5 +8,5 @@
 public protocol FeedCache {
     typealias Result = Swift.Result<Void, Error>
     
-    func savePosts(_ posts: [Post], completion: @escaping (Result) -> Void)
+    func saveFeed(_ feed: [FeedItem], completion: @escaping (Result) -> Void)
 }

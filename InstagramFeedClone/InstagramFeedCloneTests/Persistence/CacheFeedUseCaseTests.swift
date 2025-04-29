@@ -1,5 +1,5 @@
 //
-//  CacheDataUseCaseTests.swift
+//  CacheFeedUseCaseTests.swift
 //  InstagramFeedCloneAppTests
 //
 //  Created by Mohamed Afsal on 19/04/2025.
@@ -8,38 +8,36 @@
 import XCTest
 import InstagramFeedClone
 
-
-class CacheDataUseCaseTests: XCTestCase {
+class CacheFeedUseCaseTests: XCTestCase {
     
-    func test_savePosts_requestsCacheDeletion() {
+    func test_saveFeed_requestsCacheDeletion() {
         let (sut, store) = makeSUT()
-        let posts = [makePost(id: "1"), makePost(id: "2")]
 
-        sut.savePosts(posts) { _ in }
+        sut.saveFeed(uniqueItems().models) { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedData])
     }
 
-    func test_savePosts_requestsInsertionOnSuccessfulDeletion() {
+    func test_saveFeed_requestsInsertionOnSuccessfulDeletion() {
         let (sut, store) = makeSUT()
-        let posts = [makePost(id: "1"), makePost(id: "2")]
+        let feed = uniqueItems()
 
-        sut.savePosts(posts) { _ in }
+        sut.saveFeed(uniqueItems().models) { _ in }
         store.completeDeletionSuccessfully()
 
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedData, .insert(posts)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedData, .insert(feed.local)])
     }
 
-    func test_savePosts_failsOnDeletionError() {
+    func test_saveFeed_failsOnDeletionError() {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
 
-        expect(sut, toCompleteSaveWith: .failure(deletionError), when: {
+        expect(sut, toCompleteSaveWith: failure(.deletionError), when: {
             store.completeDeletion(with: deletionError)
         })
     }
 
-    func test_savePosts_failsOnInsertionError() {
+    func test_saveFeed_failsOnInsertionError() {
         let (sut, store) = makeSUT()
         let insertionError = anyNSError()
 
@@ -49,7 +47,7 @@ class CacheDataUseCaseTests: XCTestCase {
         })
     }
 
-    func test_savePosts_succeedsOnSuccessfulInsertion() {
+    func test_saveFeed_succeedsOnSuccessfulInsertion() {
         let (sut, store) = makeSUT()
 
         expect(sut, toCompleteSaveWith: .success(()), when: {
@@ -68,10 +66,14 @@ class CacheDataUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
+    private func failure(_ error: LocalFeedLoader.Error) -> LocalFeedLoader.SaveResult {
+        return .failure(error)
+    }
+    
     private func expect(_ sut: LocalFeedLoader, toCompleteSaveWith expectedResult: LocalFeedLoader.SaveResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for save completion")
 
-        sut.savePosts([makePost(id: "1")]) { receivedResult in
+        sut.saveFeed(uniqueItems().models) { receivedResult in
             switch (receivedResult, expectedResult) {
             case (.success, .success):
                 break
@@ -87,10 +89,6 @@ class CacheDataUseCaseTests: XCTestCase {
 
         action()
         wait(for: [exp], timeout: 1.0)
-    }
-    
-    private func makePost(id: String) -> Post {
-        return Post(id: id, images: [])
     }
 }
 

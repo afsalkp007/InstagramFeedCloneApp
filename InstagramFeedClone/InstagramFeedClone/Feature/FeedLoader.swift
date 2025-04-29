@@ -6,7 +6,7 @@
 //
 
 public protocol FeedLoader {
-    typealias Result = Swift.Result<[Post], Error>
+    typealias Result = Swift.Result<[FeedItem], Error>
     
     func loadFeed(completion: @escaping (Result) -> Void)
 }

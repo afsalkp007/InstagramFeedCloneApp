@@ -7,19 +7,19 @@
 
 import InstagramFeedClone
 
-class FeedStoreSpy: FeedStore {
+final class FeedStoreSpy: FeedStore {
     enum Message: Equatable {
         case retrieve
         case deleteCachedData
-        case insert([Post])
+        case insert([LocalFeedItem])
     }
 
     private(set) var receivedMessages = [Message]()
-    private var retrievalCompletions = [(Result<[Post], Error>) -> Void]()
+    private var retrievalCompletions = [(Result<[LocalFeedItem]?, Error>) -> Void]()
     private var deletionCompletions = [(Result<Void, Error>) -> Void]()
     private var insertionCompletions = [(Result<Void, Error>) -> Void]()
 
-    func retrieve(completion: @escaping (Result<[Post], Error>) -> Void) {
+    func retrieve(completion: @escaping (Result<[LocalFeedItem]?, Error>) -> Void) {
         receivedMessages.append(.retrieve)
         retrievalCompletions.append(completion)
     }
@@ -29,13 +29,13 @@ class FeedStoreSpy: FeedStore {
         deletionCompletions.append(completion)
     }
 
-    func insert(_ posts: [Post], completion: @escaping (Result<Void, Error>) -> Void) {
-        receivedMessages.append(.insert(posts))
+    func insert(_ feed: [LocalFeedItem], completion: @escaping (Result<Void, Error>) -> Void) {
+        receivedMessages.append(.insert(feed))
         insertionCompletions.append(completion)
     }
 
-    func completeRetrieval(with posts: [Post], at index: Int = 0) {
-        retrievalCompletions[index](.success(posts))
+    func completeRetrieval(with feed: [LocalFeedItem], at index: Int = 0) {
+        retrievalCompletions[index](.success(feed))
     }
 
     func completeRetrieval(with error: Error, at index: Int = 0) {

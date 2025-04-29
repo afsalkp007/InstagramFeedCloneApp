@@ -10,7 +10,7 @@ import InstagramFeedClone
 
 final class LoadDataFromCacheUseCaseTests: XCTestCase {
 
-    func test_loadPosts_requestsCacheRetrieval() {
+    func test_loadFeed_requestsCacheRetrieval() {
         let (sut, store) = makeSUT()
 
         sut.loadFeed { _ in }
@@ -18,20 +18,20 @@ final class LoadDataFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
 
-    func test_loadPosts_deliversPostsOnSuccessfulRetrieval() {
+    func test_loadFeed_deliversFeedOnSuccessfulRetrieval() {
         let (sut, store) = makeSUT()
-        let posts = [makePost(id: "1"), makePost(id: "2")]
+        let feed = uniqueItems()
 
-        expect(sut, toCompleteWith: .success(posts), when: {
-            store.completeRetrieval(with: posts)
+        expect(sut, toCompleteWith: .success(feed.models), when: {
+            store.completeRetrieval(with: feed.local)
         })
     }
 
-    func test_loadPosts_deliversErrorOnRetrievalFailure() {
+    func test_loadFeed_deliversErrorOnRetrievalFailure() {
         let (sut, store) = makeSUT()
         let retrievalError = anyNSError()
 
-        expect(sut, toCompleteWith: .failure(retrievalError), when: {
+        expect(sut, toCompleteWith: failure(.loadError), when: {
             store.completeRetrieval(with: retrievalError)
         })
     }
@@ -46,13 +46,17 @@ final class LoadDataFromCacheUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
+    private func failure(_ error: LocalFeedLoader.Error) -> LocalFeedLoader.LoadResult {
+        return .failure(error)
+    }
+    
     private func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LocalFeedLoader.LoadResult, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
 
         sut.loadFeed { receivedResult in
             switch (receivedResult, expectedResult) {
-            case let (.success(receivedPosts), .success(expectedPosts)):
-                XCTAssertEqual(receivedPosts, expectedPosts, file: file, line: line)
+            case let (.success(receivedFeed), .success(expectedFeed)):
+                XCTAssertEqual(receivedFeed, expectedFeed, file: file, line: line)
 
             case let (.failure(receivedError), .failure(expectedError)):
                 XCTAssertEqual(receivedError as NSError, expectedError as NSError, file: file, line: line)
@@ -65,9 +69,5 @@ final class LoadDataFromCacheUseCaseTests: XCTestCase {
 
         action()
         wait(for: [exp], timeout: 1.0)
-    }
-
-    private func makePost(id: String) -> Post {
-        return Post(id: id, images: [])
     }
 }

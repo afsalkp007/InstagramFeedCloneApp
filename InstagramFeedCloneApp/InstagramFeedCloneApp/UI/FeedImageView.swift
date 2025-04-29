@@ -1,5 +1,5 @@
 //
-//  ImagePostView.swift
+//  FeedImageView.swift
 //  InstagramFeedCloneApp
 //
 //  Created by Mohamed Afsal on 17/04/2025.
@@ -9,7 +9,7 @@ import SwiftUI
 import InstagramFeedClone
 
 struct FeedImageView: View {
-    let viewModel: PostViewModel
+    let viewModel: ItemViewModel
 
     @State private var image: UIImage?
     @State private var cellHeight: CGFloat = 300

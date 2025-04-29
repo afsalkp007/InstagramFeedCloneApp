@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import CoreData
 import InstagramFeedClone
 
 final class FeedUIComposer {
     private init() {}
     
     static func composeFeedView() -> FeedView {
-        let url = PostEndPoint.getPosts(page: 0).url(baseURL: baseURL)
+        let url = FeedEndPoint.getFeed(page: 0).url(baseURL: baseURL)
         var request = URLRequest(url: url)
         request.setValue("Bearer \(Constants.API.accessToken.value)", forHTTPHeaderField: "Authorization")
         
@@ -20,7 +21,7 @@ final class FeedUIComposer {
         let localFeedLoader = LocalFeedLoader(store: store)
         
         let remoteMediaLoader = RemoteMediaDataLoader(client: httpClient)
-        let localMediaLoader = LocalMediaDataLoader(store: mediaStore)
+        let localMediaLoader = LocalMediaDataLoader(store: store)
 
         let viewModel = FeedViewModel(
             feedLoader: MainQueueDispatchDecorator(
@@ -43,14 +44,13 @@ final class FeedUIComposer {
         return URLSessionHTTPClient(session: session)
     }()
     
-    private static var store: FeedStore = {
-        return UserDefaultsFeedStore(userDefaults: UserDefaults.standard)
+    private static var store: FeedStore & MediaDataStore = {
+      try! CoreDataFeedStore(
+        storeURL: NSPersistentContainer
+          .defaultDirectoryURL()
+          .appendingPathComponent("feed-store.sqlite"))
     }()
-    
-    private static var mediaStore: MediaDataStore = {
-        return FileManagerMediaStore()
-    }()
-    
+
     private static var baseURL: URL {
         return URL(string: "https://api.imgur.com")!
     }
