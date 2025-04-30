@@ -9,17 +9,19 @@ import SwiftUI
 import InstagramFeedClone
 
 struct ItemView: View {
-    let viewModel: ItemViewModel
+    @State var viewModel: ItemViewModel
     
     var body: some View {
         
         switch viewModel.item.type {
         case .videoMp4:
-            FeedVideoView(viewModel: viewModel)
+            let delegate = FeedVideoViewAdapter(viewModel: viewModel)
+            FeedVideoView(delegate: delegate)
             
         case .imageJPEG, .imagePNG, .imageGIF:
-            FeedImageView(viewModel: viewModel)
-        @unknown default:
+            let adapter = FeedImageViewAdapter(viewModel: viewModel)
+            FeedImageView(delegate: adapter)
+        default:
             EmptyView()
         }
     }

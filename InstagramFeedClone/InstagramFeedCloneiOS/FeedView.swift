@@ -8,11 +8,17 @@
 import SwiftUI
 import InstagramFeedClone
 
-struct FeedView: View {
+public struct FeedView: View {
     
     @Bindable var viewModel: FeedViewModel
+    private let delegate: FeedPreloadable
     
-    var body: some View {
+    public init(viewModel: FeedViewModel, delegate: FeedPreloadable) {
+        self.viewModel = viewModel
+        self.delegate = delegate
+    }
+    
+    public var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
@@ -26,7 +32,7 @@ struct FeedView: View {
                     viewModel.fetchFeed()
                 }
                 .onDisappear {
-                    viewModel.cancelMediaLoad()
+                    delegate.didCancelMediaLoad()
                 }
             }
             .refreshable {

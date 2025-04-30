@@ -4,7 +4,7 @@
         <relationship name="feed" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="ManagedFeedItem" inverseName="cache" inverseEntity="ManagedFeedItem"/>
     </entity>
     <entity name="ManagedFeedItem" representedClassName="ManagedFeedItem" syncable="YES">
-        <attribute name="data" optional="YES" attributeType="Binary" storedInTruthFile="YES"/>
+        <attribute name="data" optional="YES" attributeType="Binary" spotlightIndexingEnabled="YES"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="type" attributeType="String"/>
         <attribute name="url" attributeType="URI"/>

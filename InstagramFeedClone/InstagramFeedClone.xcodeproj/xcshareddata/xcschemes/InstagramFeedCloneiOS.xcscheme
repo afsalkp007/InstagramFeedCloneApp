@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F4A84F862DB5175B00A165C0"
-               BuildableName = "InstagramFeedClone.framework"
-               BlueprintName = "InstagramFeedClone"
+               BlueprintIdentifier = "F415192C2DC1F70D004B5A7A"
+               BuildableName = "InstagramFeedCloneiOS.framework"
+               BlueprintName = "InstagramFeedCloneiOS"
                ReferencedContainer = "container:InstagramFeedClone.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,13 +27,21 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:CI.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F41519332DC1F70D004B5A7A"
+               BuildableName = "InstagramFeedCloneiOSTests.xctest"
+               BlueprintName = "InstagramFeedCloneiOSTests"
+               ReferencedContainer = "container:InstagramFeedClone.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -55,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F4A84F862DB5175B00A165C0"
-            BuildableName = "InstagramFeedClone.framework"
-            BlueprintName = "InstagramFeedClone"
+            BlueprintIdentifier = "F415192C2DC1F70D004B5A7A"
+            BuildableName = "InstagramFeedCloneiOS.framework"
+            BlueprintName = "InstagramFeedCloneiOS"
             ReferencedContainer = "container:InstagramFeedClone.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

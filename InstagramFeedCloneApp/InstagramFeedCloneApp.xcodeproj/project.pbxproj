@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F415194E2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F415194D2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework */; };
+		F415194F2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F415194D2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F4A851082DB51B5A00A165C0 /* InstagramFeedClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */; };
 		F4A851092DB51B5A00A165C0 /* InstagramFeedClone.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -19,6 +21,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F4A851092DB51B5A00A165C0 /* InstagramFeedClone.framework in Embed Frameworks */,
+				F415194F2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -26,6 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F415194D2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedCloneiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43CB5FB2DB0DF8500858108 /* InstagramFeedCloneApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFeedCloneApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851032DB51B2600A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4A851082DB51B5A00A165C0 /* InstagramFeedClone.framework in Frameworks */,
+				F415194E2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +76,7 @@
 		F4A851022DB51B2600A165C0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F415194D2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework */,
 				F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */,
 				F4A851032DB51B2600A165C0 /* InstagramFeedClone.framework */,
 			);

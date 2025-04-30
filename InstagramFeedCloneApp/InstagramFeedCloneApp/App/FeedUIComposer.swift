@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import InstagramFeedClone
+import InstagramFeedCloneiOS
 
 final class FeedUIComposer {
     private init() {}
@@ -22,21 +23,28 @@ final class FeedUIComposer {
         
         let remoteMediaLoader = RemoteMediaDataLoader(client: httpClient)
         let localMediaLoader = LocalMediaDataLoader(store: store)
-
+        
+        let mediaLoader: MediaDataLoader = MainQueueDispatchDecorator(
+            decoratee: RemoteMediaDataLoaderWithFallbackComposite(
+                primary: localMediaLoader,
+                fallback: MediaDataLoaderCacheDecorator(
+                    decoratee: remoteMediaLoader,
+                    cache: localMediaLoader)))
+                
+        let fvmAdapter = FeedViewModelAdapter(mediaLoader: mediaLoader)
+        
         let viewModel = FeedViewModel(
             feedLoader: MainQueueDispatchDecorator(
-                decoratee: RemoteFeedLoaderWithFallbackComposite(
-                    primary: FeedLoaderCacheDecorator(
-                        decoratee: remoteFeedLoader,
-                        cache: localFeedLoader),
-                    fallback: localFeedLoader)),
-            mediaLoader: MainQueueDispatchDecorator(
-                decoratee: RemoteMediaDataLoaderWithFallbackComposite(
-                    primary: localMediaLoader,
-                    fallback: MediaDataLoaderCacheDecorator(
-                        decoratee: remoteMediaLoader,
-                        cache: localMediaLoader))))
-        return FeedView(viewModel: viewModel)
+                decoratee: FeedLoaderPreloadingDecorator(
+                    feedLoader: RemoteFeedLoaderWithFallbackComposite(
+                        primary: localFeedLoader,
+                        fallback: FeedLoaderCacheDecorator(
+                            decoratee: remoteFeedLoader,
+                            cache: localFeedLoader)),
+                    delegate: fvmAdapter)),
+            mediaLoader: mediaLoader)
+        
+        return FeedView(viewModel: viewModel, delegate: fvmAdapter)
     }
     
     private static var httpClient: URLSessionHTTPClient = {
