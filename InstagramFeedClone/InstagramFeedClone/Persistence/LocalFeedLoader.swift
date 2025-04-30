@@ -13,6 +13,7 @@ public final class LocalFeedLoader {
     public enum Error: Swift.Error {
         case loadError
         case deletionError
+        case emptyData
     }
     
     public init(store: FeedStore) {
@@ -22,14 +23,17 @@ public final class LocalFeedLoader {
 
 extension LocalFeedLoader: FeedLoader {
     public typealias LoadResult = FeedLoader.Result
-    
+  
     public func loadFeed(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard self != nil else { return }
             
             completion(result
                 .mapError { _ in Error.loadError }
-                .flatMap { return .success($0?.toModels() ?? []) })
+                .flatMap {
+                    guard let models = $0?.toModels() else {
+                        return .failure(Error.emptyData) }
+                    return .success(models) })
         }
     }
 }

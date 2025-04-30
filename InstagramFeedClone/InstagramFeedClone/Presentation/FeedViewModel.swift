@@ -12,12 +12,18 @@ public struct ErrorWrapper: Identifiable {
     public let message: String
 }
 
+public protocol FeedPreloadable {
+    typealias EmptyCompletion = () -> Void
+    
+    func didPreloadMediaData(for feed: [FeedItem], completion: @escaping EmptyCompletion)
+    func didCancelMediaLoad()
+}
+
 @Observable
 public class FeedViewModel {
     public var viewModels: [ItemViewModel] = []
     public var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
-    private var tasks: [URL: MediaDataLoaderTask] = [:]
 
     private let feedLoader: FeedLoader
     private let mediaLoader: MediaDataLoader
@@ -37,54 +43,14 @@ public class FeedViewModel {
             switch result {
             case let .success(feed):
                 self.viewModels = feed.map { item in
-                    return ItemViewModel(
-                        item: item,
-                        loader: self.mediaLoader)
+                    return ItemViewModel(item: item, loader: self.mediaLoader)
                 }
-                self.preloadMedia(for: feed)
             case .failure(let error):
                 self.errorMessage = ErrorWrapper(message: error.localizedDescription)
             }
         }
     }
     
-    public func cancelMediaLoad() {
-        tasks.values.forEach { $0.cancel() }
-        tasks.removeAll()
-    }
-    
-    deinit {
-        cancelMediaLoad()
-    }
-}
-
-extension FeedViewModel {
-    private func preloadMedia(for feed: [FeedItem]) {
-        let mediaURLs = feed.compactMap { $0.url }
-        preloadMedia(urls: mediaURLs) { [weak self] in
-            self?.isLoading = false
-        }
-    }
-
-    func preloadMedia(urls: [URL], completion: @escaping () -> Void) {
-        let dispatchGroup = DispatchGroup()
-
-        for url in urls {
-            dispatchGroup.enter()
-                        
-            tasks[url] = mediaLoader.loadMediaData(from: url) { result in
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            completion()
-        }
-    }
-}
-
-extension FeedViewModel {
-
     public var showShimmer: Bool {
         isLoading && viewModels.isEmpty
     }

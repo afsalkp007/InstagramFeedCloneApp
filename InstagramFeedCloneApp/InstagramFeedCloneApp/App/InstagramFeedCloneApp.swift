@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import InstagramFeedCloneiOS
 
 @main
 struct InstagramLikeFeedApp: App {
