@@ -8,14 +8,21 @@
 import SwiftUI
 import InstagramFeedClone
 
+public protocol FeedViewDelegate {
+    func didRequestsFeed()
+}
+
 public struct FeedView: View {
     
     @Bindable var viewModel: FeedViewModel
-    private let delegate: FeedPreloadable
+    private let preloader: FeedPreloadable
+        
+    private var loader: FeedViewDelegate
     
-    public init(viewModel: FeedViewModel, delegate: FeedPreloadable) {
+    public init(viewModel: FeedViewModel, delegate: FeedPreloadable, loader: FeedViewDelegate) {
         self.viewModel = viewModel
-        self.delegate = delegate
+        self.preloader = delegate
+        self.loader = loader
     }
     
     public var body: some View {
@@ -29,22 +36,22 @@ public struct FeedView: View {
                     }
                 }
                 .onAppear {
-                    viewModel.fetchFeed()
+                    loader.didRequestsFeed()
                 }
                 .onDisappear {
-                    delegate.didCancelMediaLoad()
+                    preloader.didCancelMediaLoad()
                 }
             }
             .refreshable {
-                viewModel.fetchFeed()
+                loader.didRequestsFeed()
             }
             .padding()
-            .navigationTitle(viewModel.title)
+            .navigationTitle(Localized.title.value)
             .alert(item: $viewModel.errorMessage) { errorWrapper in
                 Alert(
-                    title: Text(viewModel.error),
+                    title: Text(Localized.error.value),
                     message: Text(errorWrapper.message),
-                    dismissButton: .default(Text(viewModel.ok))
+                    dismissButton: .default(Text(Localized.ok.value))
                 )
             }
         }

@@ -12,43 +12,30 @@ public struct ErrorWrapper: Identifiable {
     public let message: String
 }
 
-public protocol FeedPreloadable {
-    typealias EmptyCompletion = () -> Void
-    
-    func didPreloadMediaData(for feed: [FeedItem], completion: @escaping EmptyCompletion)
-    func didCancelMediaLoad()
-}
-
 @Observable
 public class FeedViewModel {
     public var viewModels: [ItemViewModel] = []
     public var errorMessage: ErrorWrapper?
     var isLoading: Bool = false
 
-    private let feedLoader: FeedLoader
     private let mediaLoader: MediaDataLoader
 
-    public init(feedLoader: FeedLoader, mediaLoader: MediaDataLoader) {
-        self.feedLoader = feedLoader
+    public init(mediaLoader: MediaDataLoader) {
         self.mediaLoader = mediaLoader
     }
-
-    public func fetchFeed() {
+    
+    public func didStartLoadingFeed() {
         isLoading = true
-
-        feedLoader.loadFeed { [weak self] result in
-            guard let self else { return }
-            self.isLoading = false
-
-            switch result {
-            case let .success(feed):
-                self.viewModels = feed.map { item in
-                    return ItemViewModel(item: item, loader: self.mediaLoader)
-                }
-            case .failure(let error):
-                self.errorMessage = ErrorWrapper(message: error.localizedDescription)
-            }
-        }
+    }
+    
+    public func didFinishLoading(with feed: [FeedItem]) {
+        isLoading = false
+        viewModels = ItemViewModelAdapter.adapt(feed, mediaLoader: mediaLoader)
+    }
+    
+    public func didFinishLoadingWithError(with error: Error) {
+        isLoading = false
+        errorMessage = ErrorWrapper(message: error.localizedDescription)
     }
     
     public var showShimmer: Bool {
@@ -56,42 +43,12 @@ public class FeedViewModel {
     }
 }
 
-extension FeedViewModel {
-    public var title: String {
-        Localized.title.value
-    }
-    
-    public var error: String {
-        Localized.error.value
-    }
-    
-    public var ok: String {
-        Localized.ok.value
-    }
-    
-    private enum Localized {
-        case title
-        case error
-        case ok
-        
-        var value: String {
-            switch self {
-            case .title:
-                return localized(key: "FEED_VIEW_TITLE")
-            case .error:
-                return localized(key: "FEED_VIEW_ERROR")
-            case .ok:
-                return localized(key: "FEED_VIEW_OK")
-            }
+final class ItemViewModelAdapter {
+    static func adapt(_ feed: [FeedItem], mediaLoader: MediaDataLoader) -> [ItemViewModel] {
+        return feed.map { item in
+            return ItemViewModel(item: item, loader: mediaLoader)
         }
     }
-    
-    private static func localized(key: String) -> String {
-        return NSLocalizedString(
-            key,
-          tableName: "Item",
-          bundle: Bundle(for: FeedViewModel.self),
-          comment: ""
-        )
-    }
 }
+    
+    

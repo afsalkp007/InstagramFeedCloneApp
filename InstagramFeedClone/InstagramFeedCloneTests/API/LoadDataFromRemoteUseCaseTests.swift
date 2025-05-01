@@ -34,12 +34,10 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let item1 = makeFeedItem(
-            id: "1",
             type: .imageGIF,
             url: URL(string: "https://example.com/image1.jpg")!)
         
         let item2 = makeFeedItem(
-            id: "2",
             type: .imageJPEG,
             url: URL(string: "https://example.com/image2.jpg")!)
         
@@ -98,14 +96,12 @@ final class LoadDataFromRemoteUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 5.0)
     }
     
-    private func makeFeedItem(id: String, type: MediaType, url: URL) -> (model: FeedItem, json: [String: Any]) {
-        let model = FeedItem(id: id, type: type, url: url)
+    private func makeFeedItem( type: MediaType, url: URL) -> (model: FeedItem, json: [String: Any]) {
+        let model = FeedItem(type: type, url: url)
         
         let json: [String: Any] = [
-            "id": id,
             "images": [
                 [
-                    "id": id,
                     "type": type.rawValue,
                     "link": url.absoluteString
                 ]
