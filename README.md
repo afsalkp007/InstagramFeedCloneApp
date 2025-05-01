@@ -17,7 +17,4 @@ Follow the steps to get test case reports:
 
  ![Overall Architecture Diagram](https://github.com/user-attachments/assets/2220f6e5-61b7-46e3-9890-66823fd509fc)
 
-# Dependency Diagram
-
-![Dependency](https://github.com/user-attachments/assets/db663ace-af81-46ff-b5c7-5aee7396b33d)
 
