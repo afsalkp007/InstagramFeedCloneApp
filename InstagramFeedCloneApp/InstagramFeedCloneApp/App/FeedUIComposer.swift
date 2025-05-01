@@ -31,9 +31,11 @@ final class FeedUIComposer {
                     decoratee: remoteMediaLoader,
                     cache: localMediaLoader)))
                 
-        let fvmAdapter = FeedViewModelAdapter(mediaLoader: mediaLoader)
+        let preloadingAdapter = FeedViewModelPreloadingAdapter(mediaLoader: mediaLoader)
         
-        let viewModel = FeedViewModel(
+        let viewModel = FeedViewModel(mediaLoader: mediaLoader)
+                
+        let presentationAdapter = FeedLoaderPresentationAdapter(
             feedLoader: MainQueueDispatchDecorator(
                 decoratee: FeedLoaderPreloadingDecorator(
                     feedLoader: RemoteFeedLoaderWithFallbackComposite(
@@ -41,10 +43,10 @@ final class FeedUIComposer {
                         fallback: FeedLoaderCacheDecorator(
                             decoratee: remoteFeedLoader,
                             cache: localFeedLoader)),
-                    delegate: fvmAdapter)),
-            mediaLoader: mediaLoader)
+                    delegate: preloadingAdapter)),
+            viewModel: viewModel)
         
-        return FeedView(viewModel: viewModel, delegate: fvmAdapter)
+        return FeedView(viewModel: viewModel, delegate: preloadingAdapter, loader: presentationAdapter)
     }
     
     private static var httpClient: URLSessionHTTPClient = {

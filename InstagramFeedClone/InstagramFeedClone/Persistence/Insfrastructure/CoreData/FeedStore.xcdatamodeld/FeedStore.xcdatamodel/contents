@@ -5,7 +5,6 @@
     </entity>
     <entity name="ManagedFeedItem" representedClassName="ManagedFeedItem" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" spotlightIndexingEnabled="YES"/>
-        <attribute name="id" attributeType="String"/>
         <attribute name="type" attributeType="String"/>
         <attribute name="url" attributeType="URI"/>
         <relationship name="cache" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedCache" inverseName="feed" inverseEntity="ManagedCache"/>

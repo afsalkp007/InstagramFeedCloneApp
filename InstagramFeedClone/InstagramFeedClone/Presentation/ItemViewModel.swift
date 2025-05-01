@@ -13,6 +13,7 @@ public class ItemViewModel: Identifiable {
     private let loader: MediaDataLoader
     
     private var tasks: [URL: MediaDataLoaderTask] = [:]
+    public typealias DataCompletion = (Result<Data, Error>) -> Void
         
     init(item: FeedItem, loader: MediaDataLoader) {
         self.item = item
@@ -27,11 +28,7 @@ public class ItemViewModel: Identifiable {
     deinit {
         cancelMediaLoad()
     }
-}
- 
-extension ItemViewModel {
-    public typealias DataCompletion = (Result<Data, Error>) -> Void
-    
+        
     public func loadMedia(completion: @escaping DataCompletion) {
         tasks[item.url] = loader.loadMediaData(from: item.url) { result in
             

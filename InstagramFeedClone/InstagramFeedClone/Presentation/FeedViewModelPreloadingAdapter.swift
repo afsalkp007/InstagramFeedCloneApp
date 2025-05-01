@@ -7,7 +7,14 @@
 
 import Foundation
 
-public class FeedViewModelAdapter: FeedPreloadable {
+public protocol FeedPreloadable {
+    typealias EmptyCompletion = () -> Void
+    
+    func didPreloadMediaData(for feed: [FeedItem], completion: @escaping EmptyCompletion)
+    func didCancelMediaLoad()
+}
+
+public class FeedViewModelPreloadingAdapter: FeedPreloadable {
     private var tasks: [URL: MediaDataLoaderTask] = [:]
 
     private let mediaLoader: MediaDataLoader

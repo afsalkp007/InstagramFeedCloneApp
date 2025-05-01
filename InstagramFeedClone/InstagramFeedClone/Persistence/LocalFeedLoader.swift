@@ -57,13 +57,13 @@ extension LocalFeedLoader: FeedCache {
 
 extension Array where Element == LocalFeedItem {
     func toModels() -> [FeedItem] {
-        return map { FeedItem(id: $0.id, type: $0.type, url: $0.url) }
+        return map { FeedItem(type: $0.type, url: $0.url) }
     }
 }
 
 extension Array where Element == FeedItem {
     func toLocal() -> [LocalFeedItem] {
-        return map { LocalFeedItem(id: $0.id, type: $0.type, url: $0.url) }
+        return map { LocalFeedItem(type: $0.type, url: $0.url) }
     }
 }
 
