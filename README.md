@@ -15,6 +15,8 @@ Follow the steps to get test case reports:
 
 # Architecture
 
- ![Overall Architecture Diagram](https://github.com/user-attachments/assets/2220f6e5-61b7-46e3-9890-66823fd509fc)
+ ![Arch](https://github.com/user-attachments/assets/f144cb76-44f9-4899-b864-172d4372a971)
+
+
 
 
