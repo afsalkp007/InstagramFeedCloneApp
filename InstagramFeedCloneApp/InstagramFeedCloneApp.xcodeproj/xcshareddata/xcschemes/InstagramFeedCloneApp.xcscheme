@@ -40,7 +40,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F429E7BD2DB30CA300AF3F52"
+               BlueprintIdentifier = "F4151E5B2DC52771004B5A7A"
                BuildableName = "InstagramFeedCloneAppTests.xctest"
                BlueprintName = "InstagramFeedCloneAppTests"
                ReferencedContainer = "container:InstagramFeedCloneApp.xcodeproj">

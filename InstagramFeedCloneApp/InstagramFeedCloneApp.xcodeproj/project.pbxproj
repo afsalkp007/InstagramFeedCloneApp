@@ -13,6 +13,16 @@
 		F4A851092DB51B5A00A165C0 /* InstagramFeedClone.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F4151E602DC52771004B5A7A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F43CB5F32DB0DF8500858108 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F43CB5FA2DB0DF8500858108;
+			remoteInfo = InstagramFeedCloneApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		F4A8510A2DB51B5A00A165C0 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -30,12 +40,18 @@
 
 /* Begin PBXFileReference section */
 		F415194D2DC1F7CF004B5A7A /* InstagramFeedCloneiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedCloneiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4151E5C2DC52771004B5A7A /* InstagramFeedCloneAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InstagramFeedCloneAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43CB5FB2DB0DF8500858108 /* InstagramFeedCloneApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramFeedCloneApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851032DB51B2600A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A851072DB51B5A00A165C0 /* InstagramFeedClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InstagramFeedClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F4151E5D2DC52771004B5A7A /* InstagramFeedCloneAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = InstagramFeedCloneAppTests;
+			sourceTree = "<group>";
+		};
 		F43CB5FD2DB0DF8500858108 /* InstagramFeedCloneApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = InstagramFeedCloneApp;
@@ -44,6 +60,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F4151E592DC52771004B5A7A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F43CB5F82DB0DF8500858108 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -60,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				F43CB5FD2DB0DF8500858108 /* InstagramFeedCloneApp */,
+				F4151E5D2DC52771004B5A7A /* InstagramFeedCloneAppTests */,
 				F4A851022DB51B2600A165C0 /* Frameworks */,
 				F43CB5FC2DB0DF8500858108 /* Products */,
 			);
@@ -69,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				F43CB5FB2DB0DF8500858108 /* InstagramFeedCloneApp.app */,
+				F4151E5C2DC52771004B5A7A /* InstagramFeedCloneAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,6 +111,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F4151E5B2DC52771004B5A7A /* InstagramFeedCloneAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4151E622DC52771004B5A7A /* Build configuration list for PBXNativeTarget "InstagramFeedCloneAppTests" */;
+			buildPhases = (
+				F4151E582DC52771004B5A7A /* Sources */,
+				F4151E592DC52771004B5A7A /* Frameworks */,
+				F4151E5A2DC52771004B5A7A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F4151E612DC52771004B5A7A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F4151E5D2DC52771004B5A7A /* InstagramFeedCloneAppTests */,
+			);
+			name = InstagramFeedCloneAppTests;
+			packageProductDependencies = (
+			);
+			productName = InstagramFeedCloneAppTests;
+			productReference = F4151E5C2DC52771004B5A7A /* InstagramFeedCloneAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F43CB5FA2DB0DF8500858108 /* InstagramFeedCloneApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F43CB6092DB0DF8500858108 /* Build configuration list for PBXNativeTarget "InstagramFeedCloneApp" */;
@@ -119,6 +167,11 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					F4151E5B2DC52771004B5A7A = {
+						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
+						TestTargetID = F43CB5FA2DB0DF8500858108;
+					};
 					F43CB5FA2DB0DF8500858108 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -139,11 +192,19 @@
 			projectRoot = "";
 			targets = (
 				F43CB5FA2DB0DF8500858108 /* InstagramFeedCloneApp */,
+				F4151E5B2DC52771004B5A7A /* InstagramFeedCloneAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F4151E5A2DC52771004B5A7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F43CB5F92DB0DF8500858108 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -154,6 +215,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F4151E582DC52771004B5A7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F43CB5F72DB0DF8500858108 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -163,7 +231,52 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		F4151E612DC52771004B5A7A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F43CB5FA2DB0DF8500858108 /* InstagramFeedCloneApp */;
+			targetProxy = F4151E602DC52771004B5A7A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		F4151E632DC52771004B5A7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afsal.mohamed.InstagramFeedCloneAppTests.InstagramFeedCloneAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InstagramFeedCloneApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InstagramFeedCloneApp";
+			};
+			name = Debug;
+		};
+		F4151E642DC52771004B5A7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afsal.mohamed.InstagramFeedCloneAppTests.InstagramFeedCloneAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InstagramFeedCloneApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InstagramFeedCloneApp";
+			};
+			name = Release;
+		};
 		F43CB6072DB0DF8500858108 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -299,7 +412,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -333,7 +446,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -354,6 +467,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F4151E622DC52771004B5A7A /* Build configuration list for PBXNativeTarget "InstagramFeedCloneAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4151E632DC52771004B5A7A /* Debug */,
+				F4151E642DC52771004B5A7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F43CB5F62DB0DF8500858108 /* Build configuration list for PBXProject "InstagramFeedCloneApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

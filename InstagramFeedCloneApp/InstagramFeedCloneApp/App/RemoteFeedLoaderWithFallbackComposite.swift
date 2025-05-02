@@ -8,16 +8,16 @@
 import Foundation
 import InstagramFeedClone
 
-final class RemoteFeedLoaderWithFallbackComposite: FeedLoader {
+public final class RemoteFeedLoaderWithFallbackComposite: FeedLoader {
     private let primary: FeedLoader
     private let fallback: FeedLoader
     
-    init(primary: FeedLoader, fallback: FeedLoader) {
+    public init(primary: FeedLoader, fallback: FeedLoader) {
         self.primary = primary
         self.fallback = fallback
     }
     
-    func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
+    public func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
         primary.loadFeed { [weak self] result in
             switch result {
             case .success:
