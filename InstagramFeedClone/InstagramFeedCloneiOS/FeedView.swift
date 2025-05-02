@@ -8,42 +8,35 @@
 import SwiftUI
 import InstagramFeedClone
 
-public protocol FeedViewDelegate {
-    func didRequestsFeed()
-}
-
 public struct FeedView: View {
     
-    @Bindable var viewModel: FeedViewModel
+    @Bindable var viewModel: FeedPresentationAdapter
     private let preloader: FeedPreloadable
-        
-    private var loader: FeedViewDelegate
-    
-    public init(viewModel: FeedViewModel, delegate: FeedPreloadable, loader: FeedViewDelegate) {
+            
+    public init(viewModel: FeedPresentationAdapter, delegate: FeedPreloadable) {
         self.viewModel = viewModel
         self.preloader = delegate
-        self.loader = loader
     }
     
     public var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    if viewModel.showShimmer {
+                    if viewModel.isLoading {
                         shimmerViews
                     } else {
                         itemViews
                     }
                 }
                 .onAppear {
-                    loader.didRequestsFeed()
+                    viewModel.loadFeed()
                 }
                 .onDisappear {
                     preloader.didCancelMediaLoad()
                 }
             }
             .refreshable {
-                loader.didRequestsFeed()
+                viewModel.loadFeed()
             }
             .padding()
             .navigationTitle(Localized.title.value)
@@ -67,7 +60,18 @@ public struct FeedView: View {
     
     private var itemViews: some View {
         ForEach(viewModel.viewModels) { viewModel in
-            ItemView(viewModel: viewModel)
+            
+            switch viewModel.item.type {
+            case .videoMp4:
+                let delegate = FeedVideoViewAdapter(viewModel: viewModel)
+                FeedVideoView(delegate: delegate)
+                
+            case .imageJPEG, .imagePNG, .imageGIF:
+                let adapter = FeedImageViewAdapter(viewModel: viewModel)
+                FeedImageView(delegate: adapter)
+            default:
+                EmptyView()
+            }
         }
     }
 }

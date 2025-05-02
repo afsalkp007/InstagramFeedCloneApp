@@ -7,48 +7,31 @@
 
 import Foundation
 
-public struct ErrorWrapper: Identifiable {
-    public let id = UUID()
-    public let message: String
-}
-
-@Observable
 public class FeedViewModel {
-    public var viewModels: [ItemViewModel] = []
-    public var errorMessage: ErrorWrapper?
-    var isLoading: Bool = false
+    typealias Observer<T> = (T) -> Void
+    
+    private let feedLoader: FeedLoader
 
-    private let mediaLoader: MediaDataLoader
+    public init(feedLoader: FeedLoader) {
+        self.feedLoader = feedLoader
+    }
+    
+    var onIsLoad: Observer<Bool>?
+    var onLoadFeed: Observer<[FeedItem]>?
+    var onLoadError: Observer<Error>?
+        
+    func didRequestsFeed() {
+        onIsLoad?(true)
 
-    public init(mediaLoader: MediaDataLoader) {
-        self.mediaLoader = mediaLoader
-    }
-    
-    public func didStartLoadingFeed() {
-        isLoading = true
-    }
-    
-    public func didFinishLoading(with feed: [FeedItem]) {
-        isLoading = false
-        viewModels = ItemViewModelAdapter.adapt(feed, mediaLoader: mediaLoader)
-    }
-    
-    public func didFinishLoadingWithError(with error: Error) {
-        isLoading = false
-        errorMessage = ErrorWrapper(message: error.localizedDescription)
-    }
-    
-    public var showShimmer: Bool {
-        isLoading && viewModels.isEmpty
-    }
-}
-
-final class ItemViewModelAdapter {
-    static func adapt(_ feed: [FeedItem], mediaLoader: MediaDataLoader) -> [ItemViewModel] {
-        return feed.map { item in
-            return ItemViewModel(item: item, loader: mediaLoader)
+        feedLoader.loadFeed { [weak self] result in
+            self?.onIsLoad?(false)
+            
+            switch result {
+            case let .success(feed):
+                self?.onLoadFeed?(feed)
+            case let .failure(error):
+                self?.onLoadError?(error)
+            }
         }
     }
-}
-    
-    
+}    
