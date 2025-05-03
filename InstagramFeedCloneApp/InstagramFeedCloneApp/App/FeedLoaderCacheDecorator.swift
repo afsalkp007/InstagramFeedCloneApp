@@ -8,16 +8,16 @@
 import Foundation
 import InstagramFeedClone
 
-final class FeedLoaderCacheDecorator: FeedLoader {
+public final class FeedLoaderCacheDecorator: FeedLoader {
     private let decoratee: FeedLoader
     private let cache: FeedCache
     
-    init(decoratee: FeedLoader, cache: FeedCache) {
+    public init(decoratee: FeedLoader, cache: FeedCache) {
         self.decoratee = decoratee
         self.cache = cache
     }
     
-    func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
+    public func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
         decoratee.loadFeed { [weak self] result in
             completion(result.map { feed in
                 self?.cache.saveIgnoringResult(feed)
