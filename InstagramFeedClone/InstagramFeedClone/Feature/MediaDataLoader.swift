@@ -14,5 +14,6 @@ public protocol MediaDataLoaderTask {
 public protocol MediaDataLoader {
     typealias Result = Swift.Result<Data, Error>
     
+    @discardableResult
     func loadMediaData(from url: URL, completion: @escaping (Result) -> Void) -> MediaDataLoaderTask
 }

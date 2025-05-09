@@ -15,7 +15,7 @@ public struct ErrorWrapper: Identifiable {
 @Observable
 public final class FeedPresentationAdapter {
     public var isLoading: Bool = false
-    public var viewModels: [ItemViewModel] = []
+    public var viewModels: [MediaViewModel] = []
     public var errorMessage: ErrorWrapper?
     
     private let viewModel: FeedViewModel
@@ -45,9 +45,9 @@ public final class FeedPresentationAdapter {
         }
     }
     
-    private static func adapt(_ feed: [FeedItem], mediaLoader: MediaDataLoader) -> [ItemViewModel] {
+    private static func adapt(_ feed: [FeedItem], mediaLoader: MediaDataLoader) -> [MediaViewModel] {
         return feed.map { item in
-            return ItemViewModel(item: item, loader: mediaLoader)
+            return MediaViewModel(item: item, loader: mediaLoader)
         }
     }
 }
