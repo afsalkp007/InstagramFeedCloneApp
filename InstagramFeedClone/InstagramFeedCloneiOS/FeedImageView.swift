@@ -6,35 +6,28 @@
 //
 
 import SwiftUI
-
-public protocol FeedImageViewDelegate {
-    func didLoadImage()
-    func didCancelLoadingImage()
-    
-    var image: UIImage? { get }
-    var cellHeight: CGFloat { get }
-}
+import InstagramFeedClone
 
 struct FeedImageView: View {
-    var delegate: FeedImageViewDelegate
+    var viewModel: FeedImageViewModel
     
     var body: some View {
         Group {
-            if let image = delegate.image {
+            if let image = viewModel.image {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: viewModel.cellHeight)
                     .cornerRadius(10)
             } else {
                 ShimmerView()
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: viewModel.cellHeight)
                     .cornerRadius(10)
-                    .onAppear { delegate.didLoadImage() }
-                    .onDisappear { delegate.didCancelLoadingImage() }
+                    .onAppear { viewModel.didLoadImage() }
+                    .onDisappear { viewModel.didCancelLoadingImage() }
             }
         }
-        .frame(height: delegate.cellHeight)
+        .frame(height: viewModel.cellHeight)
     }
 }

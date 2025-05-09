@@ -6,20 +6,27 @@
 //
 
 import AVKit
-import InstagramFeedClone
 
 @Observable
-final class FeedVideoViewAdapter: FeedVideoViewDelegate {
-    var player: AVPlayer?
-    var cellHeight: CGFloat = 300
+public final class FeedVideoViewModel {
+    public var player: AVPlayer?
+    public var cellHeight: CGFloat = 300
     
-    private let viewModel: ItemViewModel
+    private let viewModel: MediaViewModel
     
-    init(viewModel: ItemViewModel) {
+    public init(viewModel: MediaViewModel) {
         self.viewModel = viewModel
     }
-        
-    func didRequestVideo() {
+    
+    private func tempURL() -> URL {
+        return FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent(viewModel.item.url.lastPathComponent)
+    }
+}
+ 
+extension FeedVideoViewModel {
+    public func didRequestVideo() {
         viewModel.loadMedia { [weak self] result in
             guard let self = self, let data = try? result.get() else { return }
             
@@ -28,17 +35,13 @@ final class FeedVideoViewAdapter: FeedVideoViewDelegate {
             try? self.calculateHeight()
         }
     }
-        
-    func didCancelVideoLoad() {
+    
+    public func didCancelVideoLoad() {
         viewModel.cancelMediaLoad()
     }
+}
     
-    private func tempURL() -> URL {
-        return FileManager.default
-            .temporaryDirectory
-            .appendingPathComponent(viewModel.item.url.lastPathComponent)
-    }
-    
+extension FeedVideoViewModel {
     private func calculateHeight() throws {
         let asset = AVURLAsset(url: tempURL())
         

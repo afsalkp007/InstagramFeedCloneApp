@@ -6,20 +6,21 @@
 //
 
 import SwiftUI
-import InstagramFeedClone
 
 @Observable
-final class FeedImageViewAdapter: FeedImageViewDelegate {
-    var image: UIImage?
-    var cellHeight: CGFloat = 300
-        
-    private let viewModel: ItemViewModel
+public final class FeedImageViewModel {
+    public var image: UIImage?
+    public var cellHeight: CGFloat = 300
     
-    init(viewModel: ItemViewModel) {
+    private let viewModel: MediaViewModel
+    
+    public init(viewModel: MediaViewModel) {
         self.viewModel = viewModel
     }
-    
-    func didLoadImage() {
+}
+ 
+extension FeedImageViewModel {
+    public func didLoadImage() {
         viewModel.loadMedia { result in
             if let data = try? result.get(), let downloadedImage = UIImage(data: data) {
                 self.image = downloadedImage
@@ -28,10 +29,12 @@ final class FeedImageViewAdapter: FeedImageViewDelegate {
         }
     }
     
-    func didCancelLoadingImage() {
+    public func didCancelLoadingImage() {
         viewModel.cancelMediaLoad()
     }
-    
+}
+ 
+extension FeedImageViewModel {
     private func calculateHeight(for image: UIImage) {
         let aspectRatio = image.size.height / image.size.width
         let calculatedHeight = UIScreen.main.bounds.width * aspectRatio

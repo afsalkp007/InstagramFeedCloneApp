@@ -7,32 +7,25 @@
 
 import SwiftUI
 import AVKit
-
-public protocol FeedVideoViewDelegate {
-    func didRequestVideo()
-    func didCancelVideoLoad()
-    
-    var player: AVPlayer? { get }
-    var cellHeight: CGFloat { get }
-}
+import InstagramFeedClone
 
 struct FeedVideoView: View {
-    let delegate: FeedVideoViewDelegate
+    let viewModel: FeedVideoViewModel
     
     var body: some View {
         Group {
-            if let player = delegate.player {
+            if let player = viewModel.player {
                 VideoPlayer(player: player)
                     .onAppear { player.play() }
                     .onDisappear { player.pause() }
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: viewModel.cellHeight)
                     .cornerRadius(10)
             } else {
                 ShimmerView()
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: viewModel.cellHeight)
                     .cornerRadius(10)
-                    .onAppear { delegate.didRequestVideo() }
-                    .onDisappear { delegate.didCancelVideoLoad() }
+                    .onAppear { viewModel.didRequestVideo() }
+                    .onDisappear { viewModel.didCancelVideoLoad() }
             }
         }
     }

@@ -63,12 +63,12 @@ public struct FeedView: View {
             
             switch viewModel.item.type {
             case .videoMp4:
-                let delegate = FeedVideoViewAdapter(viewModel: viewModel)
-                FeedVideoView(delegate: delegate)
+                let viewModel = FeedVideoViewModel(viewModel: viewModel)
+                FeedVideoView(viewModel: viewModel)
                 
             case .imageJPEG, .imagePNG, .imageGIF:
-                let adapter = FeedImageViewAdapter(viewModel: viewModel)
-                FeedImageView(delegate: adapter)
+                let viewModel = FeedImageViewModel(viewModel: viewModel)
+                FeedImageView(viewModel: viewModel)
             default:
                 EmptyView()
             }
