@@ -8,9 +8,7 @@
 import Foundation
 
 public protocol FeedPreloadable {
-    typealias EmptyCompletion = () -> Void
-    
-    func didPreloadMediaData(for feed: [FeedItem], completion: @escaping EmptyCompletion)
+    func didPreloadMediaData(for feed: [FeedItem])
     func didCancelMediaLoad()
 }
 
@@ -23,20 +21,10 @@ public class FeedViewModelPreloadingAdapter: FeedPreloadable {
         self.mediaLoader = mediaLoader
     }
     
-    public func didPreloadMediaData(for feed: [FeedItem], completion: @escaping FeedPreloadable.EmptyCompletion) {
-        let dispatchGroup = DispatchGroup()
-
+    public func didPreloadMediaData(for feed: [FeedItem]) {
         let mediaURLs = feed.compactMap(\.url)
         for url in mediaURLs {
-            dispatchGroup.enter()
-                        
-            tasks[url] = mediaLoader.loadMediaData(from: url) { result in
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            completion()
+            tasks[url] = mediaLoader.loadMediaData(from: url) { _ in }
         }
     }
     

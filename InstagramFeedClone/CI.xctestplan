@@ -9,9 +9,29 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:InstagramFeedClone.xcodeproj",
+          "identifier" : "F4A84F862DB5175B00A165C0",
+          "name" : "InstagramFeedClone"
+        },
+        {
+          "containerPath" : "container:..\/InstagramFeedCloneApp\/InstagramFeedCloneApp.xcodeproj",
+          "identifier" : "F43CB5FA2DB0DF8500858108",
+          "name" : "InstagramFeedCloneApp"
+        }
+      ]
+    }
   },
   "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/InstagramFeedCloneApp\/InstagramFeedCloneApp.xcodeproj",
+        "identifier" : "F4151E5B2DC52771004B5A7A",
+        "name" : "InstagramFeedCloneAppTests"
+      }
+    },
     {
       "target" : {
         "containerPath" : "container:InstagramFeedClone.xcodeproj",

@@ -6,35 +6,52 @@
 //
 
 import SwiftUI
-
-public protocol FeedImageViewDelegate {
-    func didLoadImage()
-    func didCancelLoadingImage()
-    
-    var image: UIImage? { get }
-    var cellHeight: CGFloat { get }
-}
+import InstagramFeedClone
 
 struct FeedImageView: View {
-    var delegate: FeedImageViewDelegate
+    @State var image: UIImage?
+    @State var cellHeight: CGFloat = 300
+
+    let viewModel: MediaViewModel
     
     var body: some View {
         Group {
-            if let image = delegate.image {
+            if let image = image {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: cellHeight)
                     .cornerRadius(10)
             } else {
                 ShimmerView()
-                    .frame(height: delegate.cellHeight)
+                    .frame(height: cellHeight)
                     .cornerRadius(10)
-                    .onAppear { delegate.didLoadImage() }
-                    .onDisappear { delegate.didCancelLoadingImage() }
+                    .onAppear { loadImage() }
+                    .onDisappear { viewModel.cancelMediaLoad() }
             }
         }
-        .frame(height: delegate.cellHeight)
+        .frame(height: cellHeight)
     }
+    
+    private func loadImage() {
+            viewModel.loadMedia { result in
+                switch result {
+                case let .success(data):
+                    if let downloadedImage = UIImage(data: data) {
+                        self.image = downloadedImage
+                        self.calculateHeight(for: downloadedImage)
+                    }
+                case .failure:
+                    self.image = nil
+                }
+            }
+        }
+
+        private func calculateHeight(for image: UIImage) {
+            let aspectRatio = image.size.height / image.size.width
+            let calculatedHeight = UIScreen.main.bounds.width * aspectRatio
+            let maxHeight = UIScreen.main.bounds.height * 0.5
+            self.cellHeight = min(calculatedHeight, maxHeight)
+        }
 }

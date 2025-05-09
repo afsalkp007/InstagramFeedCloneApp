@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ItemViewModel: Identifiable {
+public class MediaViewModel: Identifiable {
     public let id = UUID()
     public let item: FeedItem
     private let loader: MediaDataLoader

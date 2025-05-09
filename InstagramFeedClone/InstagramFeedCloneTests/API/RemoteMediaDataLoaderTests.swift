@@ -14,7 +14,7 @@ final class RemoteMediaDataLoaderTests: XCTestCase {
         let url = anyURL()
         let (sut, client) = makeSUT()
         
-        _ = sut.loadMediaData(from: url) { _ in }
+        sut.loadMediaData(from: url) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
