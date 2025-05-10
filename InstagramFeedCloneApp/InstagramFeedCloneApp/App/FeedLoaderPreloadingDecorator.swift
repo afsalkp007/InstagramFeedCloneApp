@@ -9,11 +9,11 @@ import InstagramFeedClone
 
 final class FeedLoaderPreloadingDecorator: FeedLoader {
     private let decoratee: FeedLoader
-    private let delegate: FeedPreloadable
+    private let preloader: FeedPreloadable
     
-    init(feedLoader: FeedLoader, delegate: FeedPreloadable) {
+    init(feedLoader: FeedLoader, preloader: FeedPreloadable) {
         self.decoratee = feedLoader
-        self.delegate = delegate
+        self.preloader = preloader
     }
     
     func loadFeed(completion: @escaping (FeedLoader.Result) -> Void) {
@@ -22,7 +22,7 @@ final class FeedLoaderPreloadingDecorator: FeedLoader {
             
             completion(result
                 .map { feed in
-                    self.delegate.didPreloadMediaData(for: feed)
+                    self.preloader.didPreloadMediaData(for: feed)
                     return feed
                 })
         }

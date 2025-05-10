@@ -42,7 +42,7 @@ final class FeedUIComposer {
                             fallback: FeedLoaderCacheDecorator(
                                 decoratee: remoteFeedLoader,
                                 cache: localFeedLoader)),
-                        delegate: preloadingAdapter))),
+                        preloader: preloadingAdapter))),
             mediaLoader: mediaLoader)
         
         return FeedView(viewModel: viewModel, delegate: preloadingAdapter)
@@ -64,3 +64,6 @@ final class FeedUIComposer {
         return URL(string: "https://api.imgur.com")!
     }
 }
+
+
+
