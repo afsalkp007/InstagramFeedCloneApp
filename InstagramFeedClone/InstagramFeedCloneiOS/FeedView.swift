@@ -19,7 +19,7 @@ public struct FeedView: View {
     }
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 16) {
                     if viewModel.isLoading {
